@@ -1,0 +1,16 @@
+{
+    "SleepInterval": 60,
+    "Nodes": [
+        {
+            "Name": "google.com",
+            "Address": "www.google.com",
+            "Protocol": "ICMP",
+            "DependsOn": "WAN"
+        },
+        {
+            "Name": "WAN",
+            "Address": "192.168.0.1",
+            "Protocol": "ICMP"
+        }
+    ]
+}
