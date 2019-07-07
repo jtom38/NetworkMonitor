@@ -11,6 +11,18 @@
             "Name": "WAN",
             "Address": "192.168.0.1",
             "Protocol": "ICMP"
+        },
+        {
+            "Name": "Google",
+            "Address": "http://www.google.com",
+            "Protocol": "HTTP",
+            "DependsOn": "WAN"
+        },
+        {
+            "Name": "Reddit",
+            "Address" : "http://www.reddit.com",
+            "Protocol" : "HTTP",
+            "DependsOn":"WAN"
         }
     ]
 }

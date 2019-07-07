@@ -1,4 +1,6 @@
 
+import os
+import time
 import json
 
 class Config:
@@ -20,7 +22,23 @@ class Config:
             print(f'Failed to load {JsonConfig}')
         
         pass
-    
+
+    def UpdateConfig(self):
+       while True:
+           if os.path.exists('config.json') == True:
+               # found the file
+               try:
+                   cfg = Config('config.json')
+                   if cfg.Nodes != "":
+                       return cfg
+               except Exception:
+                   print("Trying again in 30 seconds.")
+                   time.sleep(30)
+           else:
+               print("No config.json was found.  Exiting...")
+               exit
+
+   
     def __ParseInterval(self, json:str):
         """
         About:
@@ -34,6 +52,6 @@ class Config:
             print(d['Name'])
         pass
 
-if __name__ == "__main__":
-    Config
-    pass
+#if __name__ == "__main__":
+    #Config
+    #pass
