@@ -1,10 +1,12 @@
 
 import os
 import time
+import colorama
 
 class TerminalOutput():
 
     def __init__(self):
+        colorama.init()
         self.output: str = ''
         self.numOfColumns:int = 3
         pass
@@ -49,7 +51,12 @@ class TerminalOutput():
         """
         About: Stores all the rows that it has been given.
         """
-        self.output = f"{self.output}\n{row}"
+        if row.__contains__("Online"):
+            self.output = f"{self.output}\n{colorama.Fore.GREEN}{row}{colorama.Style.RESET_ALL}"
+        elif row.__contains__("Offline"):
+            self.output = f"{self.output}\n{colorama.Fore.RED}{row}{colorama.Style.RESET_ALL}"
+        else:
+            self.output = f"{self.output}\n{row}"
 
     def StartSleep(self, SleepTimer:int):
 

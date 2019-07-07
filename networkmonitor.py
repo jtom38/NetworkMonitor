@@ -3,6 +3,7 @@ import platform
 import os
 import subprocess
 import time
+import colorama
 #import click
 
 from networkmonitor import Ping, Config, TerminalOutput, Http
@@ -12,6 +13,10 @@ def init():
     Init is the applications start point.  From here we will call in what we need.
 
     """
+
+    # Init colorama, helps windows
+    colorama.init()
+    
     config = Config("config.json")
     # Loop though all the nodes
 
