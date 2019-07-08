@@ -1,5 +1,5 @@
 {
-    "SleepInterval": 60,
+    "SleepInterval": 120,
     "Nodes": [
         {
             "Name":"LocalHost",
@@ -25,6 +25,11 @@
             "Name":"Reddit",
             "Address":"http://www.reddit.com",
             "Protocol":"HTTP:Get"
-        }
+        },
+	{
+	"Name": "Youtube",
+	"Address":"http://www.youtube.com",
+	"Protocol":"HTTP:Get"
+	}
     ]
 }
