@@ -16,28 +16,25 @@ class Config:
                 
                 self.SleepTimer:int = res['SleepInterval']
                 self.Nodes = res['Nodes'] 
-                #self.__ParseInterval(res)
-                #self.__ParseNodes(res)
         except Exception:
             print(f'Failed to load {JsonConfig}')
         
         pass
 
     def UpdateConfig(self):
-       while True:
-           if os.path.exists('config.json') == True:
-               # found the file
-               try:
-                   cfg = Config('config.json')
-                   if cfg.Nodes != "":
-                       return cfg
-               except Exception:
-                   print("Trying again in 30 seconds.")
-                   time.sleep(30)
-           else:
-               print("No config.json was found.  Exiting...")
-               exit
-
+        while True:
+            if os.path.exists('config.json') == True:
+                # found the file
+                try:
+                    cfg = Config('config.json')
+                    if cfg.Nodes != "":
+                        return cfg
+                except Exception:
+                    print("Trying again in 30 seconds.")
+                    time.sleep(30)
+            else:
+                print("No config.json was found.  Exiting...")
+                exit()
    
     def __ParseInterval(self, json:str):
         """

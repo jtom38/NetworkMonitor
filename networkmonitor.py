@@ -3,21 +3,22 @@ import platform
 import os
 import subprocess
 import time
-import colorama
+#import colorama
 #import click
 
 from networkmonitor import Ping, Config, TerminalOutput, Http
+from networkmonitor import (
+    NetworkMonitorException, 
+    InvalidProtocol
+    )
 
 def init():
     """
     Init is the applications start point.  From here we will call in what we need.
 
     """
-
-    # Init colorama, helps windows
-    colorama.init()
-    
     config = Config("config.json")
+
     # Loop though all the nodes
 
     while True:
@@ -32,23 +33,33 @@ def init():
         output.InsertHeader()
 
         for node in cfg.Nodes:
-            # Get the name of the column stored,
-            name = output.AdjustColumn(node['Name'], 20)
-            
-            if node['Protocol'] == "ICMP":               
+            # Generate friendly vars
+            nodeName:str    = node['Name']
+            nodeAddress:str = node["Address"]
+            nodeProtocol:str= node["Protocol"]
+
+            # 
+            if nodeProtocol.lower() == "icmp":               
                 p = Ping()
-                status = p.ProcessICMP(node["Address"])
+                status = p.ProcessICMP(nodeAddress)
                 protocol = output.AdjustColumn("ICMP", 10)
 
-            elif node['Protocol'] == "HTTP":
+            elif nodeProtocol.lower().__contains__("http"):
                 h = Http()
-                status = h.ProcessHTTP(node['Address'])
+                if nodeProtocol.lower().__contains__("get"):
+                    status = h.TestHttpGet(nodeAddress)
+
                 protocol = output.AdjustColumn("HTTP", 10)
             else:
-                pass
+                raise InvalidProtocol(f"{nodeProtocol} is invalid. Use ICMP and HTTP:Get.")
+                
+            name = output.AdjustColumn(nodeName, 20)
             status = output.AdjustColumn(status, 10)    
             
-            output.AddRow(f"{name}{status}{protocol}")        
+            output.AddRow(f"{name}{status}{protocol}")
+            
+            # Check to see if we have nodes under this level
+
 
         output.InsertFooter()
         output.StartSleep(cfg.SleepTimer)

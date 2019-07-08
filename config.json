@@ -2,27 +2,29 @@
     "SleepInterval": 60,
     "Nodes": [
         {
-            "Name": "google.com",
-            "Address": "www.google.com",
-            "Protocol": "ICMP",
-            "DependsOn": "WAN"
+            "Name":"LocalHost",
+            "Address":"127.0.0.1",
+            "Protocol":"icmp"
         },
         {
-            "Name": "WAN",
-            "Address": "192.168.0.1",
-            "Protocol": "ICMP"
+            "Name":"WAN",
+            "Address":"192.168.0.1",
+            "Protocol":"icmp"
+        },   
+        {
+            "Name":"Google",
+            "Address":"http://www.google.com",
+            "Protocol":"http:get"
         },
         {
-            "Name": "Google",
-            "Address": "http://www.google.com",
-            "Protocol": "HTTP",
-            "DependsOn": "WAN"
+            "Name":"Google",
+            "Address":"www.google.com",
+            "Protocol":"icmp"
         },
         {
-            "Name": "Reddit",
-            "Address" : "http://www.reddit.com",
-            "Protocol" : "HTTP",
-            "DependsOn":"WAN"
+            "Name":"Reddit",
+            "Address":"http://www.reddit.com",
+            "Protocol":"HTTP:Get"
         }
     ]
 }
