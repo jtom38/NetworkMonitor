@@ -1,0 +1,19 @@
+
+Todo:
+  Docs:
+    ☐ Add Documentation about the config file
+  CLI:
+    ☐ Add Networkmonitor as standalone exec
+    ☐ Add --config to load new files
+  Categories:
+    ☐ Add Categories to the nodes
+    ☐ Add Command to filter though categories
+  Logging:
+    ☐ Add logging of information
+    ☐ Add New Logging UI page
+    ☐ Add a index of all logs 
+  http.py:
+    ☐ custom user agent
+    post:
+      ☐ Add POST method
+      ☐ Add 'HTTP:POST' as valid flag

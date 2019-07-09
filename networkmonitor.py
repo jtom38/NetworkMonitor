@@ -34,11 +34,12 @@ def init():
 
         for node in cfg.Nodes:
             # Generate friendly vars
-            nodeName:str    = node['Name']
-            nodeAddress:str = node["Address"]
-            nodeProtocol:str= node["Protocol"]
-
-            # 
+            nodeName:str        = node['Name']
+            nodeAddress:str     = node["Address"]
+            nodeProtocol:str    = node["Protocol"]
+            nodeRequired:bool   = node["Required"]
+            nodeCategory:str    = node["Category"]
+            
             if nodeProtocol.lower() == "icmp":               
                 p = Ping()
                 status = p.ProcessICMP(nodeAddress)
