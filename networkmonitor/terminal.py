@@ -65,7 +65,8 @@ class TerminalOutput():
         while i < SleepTimer:
             self.ClearTerminal()
             print(self.output)
-            print(f"Checking again in {remaining}...")
+            msg = f"Checking again in {remaining}..."
+            print(f"{colorama.Back.LIGHTBLUE_EX}{msg}{colorama.Style.RESET_ALL}")
 
             i = i+5
             remaining = remaining-5
@@ -73,8 +74,14 @@ class TerminalOutput():
         pass
 
     def GetTerminalWidth(self):
-        rows, columns = os.popen('stty size', 'r').read().split()
-        return int(columns)
+        """
+        Returns the max width of the terminal window.
+        """
+        # Returns the max width of the console
+
+        rows, columns = os.popen('stty size', 'r').read().split()       
+        c = int(columns) - 5
+        return c
 
     def GetTerminalHeight(self):
        rows, columns = os.popen('stty size', 'r').read().split() 

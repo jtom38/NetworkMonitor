@@ -9,6 +9,12 @@ class Ping:
         pass
 
     def ProcessICMP(self, URI:str):
+        
+        if URI.lower().__contains__('http') == True:
+            URI = URI.replace("http://", "")
+        
+        if URI.lower().__contains__('https://') == True:
+            URI = URI.replace()
 
         res = self.PingHost(URI)
         if res == 0:

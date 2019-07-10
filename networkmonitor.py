@@ -37,8 +37,8 @@ def init():
             nodeName:str        = node['Name']
             nodeAddress:str     = node["Address"]
             nodeProtocol:str    = node["Protocol"]
-            nodeRequired:bool   = node["Required"]
-            nodeCategory:str    = node["Category"]
+            #nodeRequired:bool   = node["Required"]
+            #nodeCategory:str    = node["Category"]
             
             if nodeProtocol.lower() == "icmp":               
                 p = Ping()
@@ -48,7 +48,7 @@ def init():
             elif nodeProtocol.lower().__contains__("http"):
                 h = Http()
                 if nodeProtocol.lower().__contains__("get"):
-                    status = h.TestHttpGet(nodeAddress)
+                    status = h.TestHttpGet(nodeAddress, 80)
 
                 protocol = output.AdjustColumn("HTTP", 10)
             else:
