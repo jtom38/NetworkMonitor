@@ -6,4 +6,5 @@ from .config import *
 from .terminal import *
 from .http import *
 from .exceptions import *
+from .cursesHelper import *
 #from .db import SQL
