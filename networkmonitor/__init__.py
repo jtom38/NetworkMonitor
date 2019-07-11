@@ -7,4 +7,5 @@ from .terminal import *
 from .http import *
 from .exceptions import *
 from .cursesHelper import *
+from .collections import *
 #from .db import SQL

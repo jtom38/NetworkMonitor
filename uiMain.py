@@ -1,11 +1,12 @@
 
 import curses
-from networkmonitor import CursesHelper, Ping, TerminalOutput
+from networkmonitor import CursesHelper, Ping, TerminalOutput, LogsCol
 from uiLogs import uiLogs
 
 class uiMain():
 
     def __init__(self):
+        self.logs = []
         pass
 
     def Start(self):
@@ -23,6 +24,11 @@ class uiMain():
         p = Ping()
         o = TerminalOutput()
         l = uiLogs()
+        
+        i = 0
+        while i < 10:
+            self.logs.insert(self.logs.__len__()+1 ,LogsCol(level='debug', message='Unable to reach service.', name='Google', address="www.google.com", protocol='ICMP') )
+            i = i+1
 
         # clear the scree and refresh
         ch.WindowClear()
@@ -46,36 +52,32 @@ class uiMain():
             if ch.key == ord('q'):
                 # Exit application
                 pass
-            elif ch.key == ord('l'):
-                # Open logs
-                pass
-            elif ch.key == curses.KEY_F2:
-                l.Start()          
-                #ch = CursesHelper()
+            elif ch.key == curses.KEY_F2:                
+                l.logs = self.logs
+                l.Start()        
 
+                # Once we come back here, update ch with the current stdscr
+                # Helps to make the window accept input again
+                ch = CursesHelper()
+                ch.stdscr = stdscr  
                 ch.WindowClear()
                 ch.WindowRefresh()
                 ch.key = 0 
             else:
+                # Render title
+                self.__InsertTitle(stdscr)                
+                self.__InsertColHeader(stdscr, ch)
+                self.__InsertLine(stdscr, o, ch, 3)
+                self.__InsertFooter(stdscr, ch)
+
+                ch.CursorMove()
+                # Update the screen
+                ch.WindowRefresh()
+
+                ch.GetCharacter()
                 pass
 
-            # Render title
-            self.__InsertTitle(stdscr)
-
-            # x and y pos        
-            #stdscr.attron(curses.color_pair(3))
-            #stdscr.addstr(1,0, cur, curses.color_pair(1))
-            #stdscr.attroff(curses.color_pair(3))
-            self.__InsertColHeader(stdscr, ch, o)
-            self.__InsertLine(stdscr, o, 3)
-            self.__InsertFooter(stdscr, ch)
-
-            ch.CursorMove()
-            # Update the screen
-            ch.WindowRefresh()
-            
-            ch.GetCharacter()
-            #key = stdscr.getch()
+           #key = stdscr.getch()
         
         # Close key was pressed
         ch.WindowClose()            
@@ -96,24 +98,25 @@ class uiMain():
         stdscr.attroff(curses.color_pair(3))
         pass
 
-    def __InsertColHeader(self, stdscr, ch:CursesHelper, o:TerminalOutput):
-        hName           = o.AdjustColumn("Name", 15)
-        hStatus         = o.AdjustColumn("Status", 15)
-        hProtocol       = o.AdjustColumn("Protocol", 15)        
+    def __InsertColHeader(self, stdscr, ch:CursesHelper):
+        o = TerminalOutput()
+        hName           = o.AdjustColumn("Name", ch.width/3)
+        hStatus         = o.AdjustColumn("Status", ch.width/3)
+        hProtocol       = o.AdjustColumn("Protocol", ch.width/3)        
         header          = f"{hName}{hStatus}{hProtocol}"
         
         stdscr.attron(curses.color_pair(3))
         stdscr.addstr(2, 0, header)
-        stdscr.addstr(2, len(header), " " * (ch.width - len(header) - 1))
+        #stdscr.addstr(2, len(header), " " * (ch.width - len(header) - 1))
         stdscr.attroff(curses.color_pair(3))
         pass
 
-    def __InsertLine(self, stdscr, o: TerminalOutput, yCord):
-        res = "Online"
-        lName = o.AdjustColumn("Google", 15)
-        lStatus = o.AdjustColumn(res, 15)
-        lProtocol = o.AdjustColumn("ICMP", 15)
-        line:str = f"{lName}{lStatus}{lProtocol}"
+    def __InsertLine(self, stdscr, o: TerminalOutput, ch: CursesHelper ,yCord):
+        res         = "Online"
+        lName       = o.AdjustColumn("Google", ch.width/3)
+        lStatus     = o.AdjustColumn(res, ch.width/3)
+        lProtocol   = o.AdjustColumn("ICMP", ch.width/3)
+        line:str    = f"{lName}{lStatus}{lProtocol}"
         stdscr.addstr(yCord,0, line)
         pass
 

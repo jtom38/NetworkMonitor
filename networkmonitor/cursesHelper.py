@@ -42,7 +42,13 @@ class CursesHelper():
         pass
 
     def WindowRefresh(self):
+        height, width   = self.stdscr.getmaxyx()
+        self.height     = int(height)
+        self.width      = int(width)
         self.stdscr.refresh()
+
+    def WindowHeight(self):
+        return
 
     def CursorMove(self):
         # Check if the user entered a arrow key to move the cursor
@@ -76,8 +82,11 @@ class CursesHelper():
         if self.cursor_y <= 0:
             self.cursor_y = self.height-1
         
-        
-        self.stdscr.move(self.cursor_y, self.cursor_x)
+        try:
+            self.stdscr.move(self.cursor_y, self.cursor_x)
+        except:
+            # keep going
+            pass
 
     def GetCharacter(self):
         """

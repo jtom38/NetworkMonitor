@@ -1,10 +1,11 @@
 
 import curses
-from networkmonitor import CursesHelper, TerminalOutput
+from networkmonitor import CursesHelper, TerminalOutput, LogsCol
 
 class uiLogs():
 
     def __init__(self):
+        self.logs = []
         pass
 
     def Start(self):
@@ -29,6 +30,8 @@ class uiLogs():
             ch.CursorMove() 
 
             self.__InsertHeader(stdscr)
+            self.__InsertColHeader(stdscr, ch.width)
+            self.__InsertLines(stdscr, ch.height, ch.width)
             self.__InsertFooter(stdscr, ch)
 
             ch.WindowRefresh()
@@ -42,6 +45,41 @@ class uiLogs():
         stdscr.addstr(0, 0, title, curses.color_pair(1))
         stdscr.attroff(curses.color_pair(3))
         pass
+
+    def __InsertColHeader(self, stdscr, width):
+        o = TerminalOutput()
+        col = 4
+        level   = o.AdjustColumn("Level", 6)
+        name    = o.AdjustColumn('Name', 10)
+        address = o.AdjustColumn('Address', 16)
+        msg     = o.AdjustColumn('Message', width-6-10-16)
+
+
+        line = f'{level}{name}{address}{msg}'
+        stdscr.attron(curses.color_pair(3))
+        stdscr.addstr(1, 0, line)
+        stdscr.attroff(curses.color_pair(3))
+        pass
+
+    def __InsertLines(self, stdscr, height:int, width:int):
+        o = TerminalOutput()
+        x = 2        
+        col = 4
+
+        for line in self.logs:
+            if x <= height:
+                level   = o.AdjustColumn(line.level, 6)
+                name    = o.AdjustColumn(line.name, 10)
+                address = o.AdjustColumn(line.address, 16)
+                msg     = o.AdjustColumn(line.message, width-6-10-16)
+                line = f"{level}{name}{address}{msg}"
+
+                #stdscr.attron(curses.color_pair(3))
+                stdscr.addstr(x, 0, line)
+                #stdscr.attroff(curses.color_pair(3))
+                x = x+1
+            
+
 
     def __InsertFooter(self, stdscr, ch: CursesHelper):
         statusbarstr    = "|F12|Close"
