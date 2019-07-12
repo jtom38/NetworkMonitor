@@ -18,10 +18,7 @@ class TerminalOutput():
                 value = f"{value} "
 
         elif value.__len__() > Width:
-            v = value.__len__()
-            v = value.
-            value = value.
-
+            value = value[0:Width]
         return value
 
     def ClearTerminal(self):

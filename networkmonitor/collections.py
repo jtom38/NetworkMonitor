@@ -7,7 +7,6 @@ class LogsCol():
     """
     LogsCol contains the format for how log data will be stored in memory
     """
-    
 
     def __init__(self, level:str ='',message:str = '', name:str = '', 
                 address:str = '', protocol:str='' ):
@@ -24,7 +23,12 @@ class LogsCol():
 
 class NodesCol():
     """
-    NodesCol contains a record for the nodes.  Use this in an list to store the records.
+    NodesCol contains a record for the nodes from the config file.  Use this in an list to store the records.
     """
     def __init__(self):
         pass
+
+class NodeStatusCol():
+    """
+    NodeStatusCol contains the active information for each of the nodes health.
+    """

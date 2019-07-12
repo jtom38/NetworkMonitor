@@ -2,6 +2,7 @@
 import curses
 from networkmonitor import CursesHelper, Ping, TerminalOutput, LogsCol
 from uiLogs import uiLogs
+from uiHelp import uiHelp
 
 class uiMain():
 
@@ -24,6 +25,7 @@ class uiMain():
         p = Ping()
         o = TerminalOutput()
         l = uiLogs()
+        h = uiHelp()
         
         i = 0
         while i < 10:
@@ -52,6 +54,16 @@ class uiMain():
             if ch.key == ord('q'):
                 # Exit application
                 pass
+
+            elif ch.key == curses.KEY_F10:
+                h.Start()
+
+                ch = CursesHelper()
+                ch.stdscr = stdscr
+                ch.WindowClear()
+                ch.WindowRefresh()
+                ch.key = 0
+
             elif ch.key == curses.KEY_F2:                
                 l.logs = self.logs
                 l.Start()        

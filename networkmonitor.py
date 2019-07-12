@@ -9,7 +9,8 @@ import time
 from networkmonitor import Ping, Config, TerminalOutput, Http
 from networkmonitor import (
     NetworkMonitorException, 
-    InvalidProtocol
+    InvalidProtocol,
+    InvalidNodeConfiguration
     )
 
 def init():
@@ -34,25 +35,41 @@ def init():
 
         for node in cfg.Nodes:
             # Generate friendly vars
-            nodeName:str        = node['Name']
-            nodeAddress:str     = node["Address"]
-            nodeProtocol:str    = node["Protocol"]
-            #nodeRequired:bool   = node["Required"]
-            #nodeCategory:str    = node["Category"]
-            
-            if nodeProtocol.lower() == "icmp":               
+            try:
+                nodeName:str        = node['Name']
+                nodeAddress:str     = node["Address"]
+                nodeProtocol:str    = node["Protocol"]
+            except:
+                raise InvalidNodeConfiguration(f"A node is missing one of the required properties."
+                    "Please make sure all nodes have the following."
+                    "Name, Address and Protocol")
+
+            try:
+                nodeRequired:bool   = node["Required"]
+            except:
+                pass
+
+            try:                
+                nodeCategory:str    = node["Category"]
+            except:
+                pass
+
+
+            np = nodeProtocol.lower()
+            if np == "icmp":               
                 p = Ping()
                 status = p.ProcessICMP(nodeAddress)
                 protocol = output.AdjustColumn("ICMP", 10)
-
-            elif nodeProtocol.lower().__contains__("http"):
+            elif np == "http:get":
                 h = Http()
-                if nodeProtocol.lower().__contains__("get"):
-                    status = h.TestHttpGet(nodeAddress, 80)
-
-                protocol = output.AdjustColumn("HTTP", 10)
+                status = h.TestHttpGet(nodeAddress, 80)
+                protocol = output.AdjustColumn("HTTP:GET", 10)
+            elif np == "http:post":
+                h = Http()
+                status = h.Post(nodeAddress)
+                protocol = output.AdjustColumn("HTTP:POST", 10)
             else:
-                raise InvalidProtocol(f"{nodeProtocol} is invalid. Use ICMP and HTTP:Get.")
+                raise InvalidProtocol(f"{nodeProtocol} is invalid. Use ICMP, HTTP:Get, HTTP:POST.")
                 
             name = output.AdjustColumn(nodeName, 20)
             status = output.AdjustColumn(status, 10)    

@@ -1,5 +1,6 @@
 import platform
-from subprocess import DEVNULL, STDOUT, call
+#from subprocess import DEVNULL, STDOUT, call, run
+import subprocess
 
 from .terminal import TerminalOutput
 
@@ -32,7 +33,13 @@ class Ping:
         pass
 
         cmd = ['ping', param, '1', hostname]
-        return call(cmd, stdout=DEVNULL, stderr=STDOUT)
+        #return call(cmd, stdout=DEVNULL, stderr=STDOUT)
+        try:
+            d = subprocess.run(cmd, stderr=subprocess.STDOUT)
+            #d = subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True)
+            print(d)
+        except:
+            pass
         
 
 #if __name__ == "__main__":

@@ -49,13 +49,13 @@ class uiLogs():
     def __InsertColHeader(self, stdscr, width):
         o = TerminalOutput()
         col = 4
-        level   = o.AdjustColumn("Level", 6)
+        #level   = o.AdjustColumn("Level", 6)
+        dt      = o.AdjustColumn("DateTime", 19)
         name    = o.AdjustColumn('Name', 10)
         address = o.AdjustColumn('Address', 16)
         msg     = o.AdjustColumn('Message', width-6-10-16)
 
-
-        line = f'{level}{name}{address}{msg}'
+        line = f'{dt} {name}{address}{msg}'
         stdscr.attron(curses.color_pair(3))
         stdscr.addstr(1, 0, line)
         stdscr.attroff(curses.color_pair(3))
@@ -68,12 +68,12 @@ class uiLogs():
 
         for line in self.logs:
             if x <= height:
-                level   = o.AdjustColumn(line.level, 6)
+                #level   = o.AdjustColumn(line.level, 6)
                 name    = o.AdjustColumn(line.name, 10)
                 address = o.AdjustColumn(line.address, 16)
                 msg     = o.AdjustColumn(line.message, width-6-10-16)
                 dt      = o.AdjustColumn(str(line.time), 19)
-                line = f"{level} {name} {address} {dt} {msg}"
+                line = f"{dt} {name}{address}{msg}"
 
                 #stdscr.attron(curses.color_pair(3))
                 stdscr.addstr(x, 0, line)
