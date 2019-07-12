@@ -12,15 +12,15 @@ class TerminalOutput():
         pass
 
     def AdjustColumn(self, value:str, Width:int):
-        # Get the max width of the terminal size
-        #maxTermWidth  = self.GetTerminalWidth()
-
-        # Figure out how large our columns can be
-        #colWidth = maxTermWidth / self.numOfColumns
 
         if value.__len__() < Width:
             while value.__len__() < Width:
                 value = f"{value} "
+
+        elif value.__len__() > Width:
+            v = value.__len__()
+            v = value.
+            value = value.
 
         return value
 

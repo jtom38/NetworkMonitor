@@ -72,7 +72,8 @@ class uiLogs():
                 name    = o.AdjustColumn(line.name, 10)
                 address = o.AdjustColumn(line.address, 16)
                 msg     = o.AdjustColumn(line.message, width-6-10-16)
-                line = f"{level}{name}{address}{msg}"
+                dt      = o.AdjustColumn(str(line.time), 19)
+                line = f"{level} {name} {address} {dt} {msg}"
 
                 #stdscr.attron(curses.color_pair(3))
                 stdscr.addstr(x, 0, line)

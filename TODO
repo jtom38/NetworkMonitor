@@ -9,11 +9,18 @@ Todo:
     ☐ Add Categories to the nodes
     ☐ Add Command to filter though categories
   Logging:
-    ☐ Add logging of information
-    ☐ Add New Logging UI page
-    ☐ Add a index of all logs 
+    ✔ Add logging of information @done(19-07-11 17:00)
+    ✔ Add New Logging UI page @done(19-07-11 16:59)
+    ☐ Add a index of all logs
+    ✔ Add DateTime value for when the event took place @done(19-07-11 16:59)
+
+  TUI:
+    Logs:
+      ☐  Add filters
+        ☐ Filter by Name
+        ☐ Filter by Message
   http.py:
     ☐ custom user agent
     post:
-      ☐ Add POST method
+      ✔ Add POST method @done(19-07-11 17:00)
       ☐ Add 'HTTP:POST' as valid flag

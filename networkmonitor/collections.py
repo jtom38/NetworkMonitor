@@ -11,13 +11,14 @@ class LogsCol():
 
     def __init__(self, level:str ='',message:str = '', name:str = '', 
                 address:str = '', protocol:str='' ):
-        import time
+        import datetime
         self.level      = level
         self.message    = message
         self.name       = name
         self.address    = address
         self.protocol   = protocol
-        self.time       = time.localtime()
+        self.time       = datetime.datetime.now()
+
         pass    
     pass
 
