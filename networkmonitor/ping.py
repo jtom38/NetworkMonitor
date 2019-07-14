@@ -7,41 +7,56 @@ from .terminal import TerminalOutput
 class Ping:
 
     def __init__(self):
+        self.Status:str = ''
+        self.ms:int     = -1
+        self.URI:str    = ''
         pass
 
-    def ProcessICMP(self, URI:str):
-        
-        if URI.lower().__contains__('http') == True:
-            URI = URI.replace("http://", "")
-        
-        if URI.lower().__contains__('https://') == True:
-            URI = URI.replace()
-
-        res = self.PingHost(URI)
-        if res == 0:
-            status:str = "Online"       
-        else:
-            status:str = "Offline"
-
-        return status
-
     def PingHost(self, hostname:str):
+
+        self.URI = hostname
+
+        self.__CleanURI()
+
+        cmd = self.__GetCommand()
+
+        #return call(cmd, stdout=DEVNULL, stderr=STDOUT)
+        try:
+            d = subprocess.run(cmd, stdout=subprocess.PIPE ,stderr=subprocess.PIPE)
+
+            self.__ProcessReturnCode(d.returncode)
+            self.__ProcessTravelTime(d.stdout)
+            #d = subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True)
+            #print(d)
+            
+        except:
+            pass
+
+    def __CleanURI(self):
+        if self.URI.lower().__contains__('http') == True:
+            self.URI = self.URI.replace("http://", "")
+        
+        if self.URI.lower().__contains__('https://') == True:
+            self.URI = self.URI.replace()
+
+    def __GetCommand(self):
         if platform.system().lower() == "windows":       
             param = '-n'
         else:
             param = '-c'
         pass
 
-        cmd = ['ping', param, '1', hostname]
-        #return call(cmd, stdout=DEVNULL, stderr=STDOUT)
-        try:
-            d = subprocess.run(cmd, stderr=subprocess.STDOUT)
-            #d = subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True)
-            print(d)
-        except:
-            pass
-        
+        return ['ping', param, '1', self.URI]
+ 
+    def __ProcessReturnCode(self, returncode:int ):
+        if returncode == 0:
+            self.Status = 'Online'        
+        else:
+            self.Status = 'Offline'
 
-#if __name__ == "__main__":
-    #Ping
-    #pass
+    def __ProcessTravelTime(self, stdout:str):
+        if platform.system().lower() == 'windows':
+            pass
+        else:
+            i = stdout.find("time=",0, stdout.__len__())
+            print(i)

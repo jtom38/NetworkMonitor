@@ -1,6 +1,6 @@
 
 import curses
-from networkmonitor import CursesHelper, Ping, TerminalOutput, LogsCol
+from networkmonitor import CursesHelper, TerminalOutput, LogsCol, Monitor
 from uiLogs import uiLogs
 from uiHelp import uiHelp
 
@@ -8,6 +8,7 @@ class uiMain():
 
     def __init__(self):
         self.logs = []
+        self.monitor = Monitor("config.json")
         pass
 
     def Start(self):
@@ -22,10 +23,11 @@ class uiMain():
         ch = CursesHelper()
         ch.stdscr = stdscr
 
-        p = Ping()
         o = TerminalOutput()
         l = uiLogs()
         h = uiHelp()
+
+        self.monitor.Start()
         
         i = 0
         while i < 10:
@@ -79,7 +81,7 @@ class uiMain():
                 # Render title
                 self.__InsertTitle(stdscr)                
                 self.__InsertColHeader(stdscr, ch)
-                self.__InsertLine(stdscr, o, ch, 3)
+                self.__InsertLine(stdscr, o, ch, 2)
                 self.__InsertFooter(stdscr, ch)
 
                 ch.CursorMove()
@@ -96,14 +98,14 @@ class uiMain():
 
 
     def __InsertTitle(self, stdscr):
-        title = "Network Monitor"
+        title           = "NetworkMonitor"
         stdscr.attron(curses.color_pair(3))
         stdscr.addstr(0, 0, title, curses.color_pair(1))
         stdscr.attroff(curses.color_pair(3))
         pass
 
     def __InsertFooter(self, stdscr, ch: CursesHelper):
-        statusbarstr    = "|F1|Main  |F2|Logs  |F10|Help  |F12|Quit"
+        statusbarstr    = "|F2|Logs  |F10|Help  |F12|Quit"
         stdscr.attron(curses.color_pair(3))
         stdscr.addstr(ch.height-1, 0, statusbarstr)
         stdscr.addstr(ch.height-1, len(statusbarstr), " " * (ch.width - len(statusbarstr) - 1))
@@ -118,7 +120,7 @@ class uiMain():
         header          = f"{hName}{hStatus}{hProtocol}"
         
         stdscr.attron(curses.color_pair(3))
-        stdscr.addstr(2, 0, header)
+        stdscr.addstr(1, 0, header)
         #stdscr.addstr(2, len(header), " " * (ch.width - len(header) - 1))
         stdscr.attroff(curses.color_pair(3))
         pass

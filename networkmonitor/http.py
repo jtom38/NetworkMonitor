@@ -1,7 +1,7 @@
 
 import requests
 
-from .terminal import TerminalOutput
+#from .terminal import TerminalOutput
 
 
 class Http:
@@ -13,9 +13,9 @@ class Http:
         try:
             r = requests.get(URI)
             if r.status_code == 200:
-                return "Online"
+                return True
             else: 
-                return "Offline"
+                return False
         except Exception:
             raise "Make sure the url has 'http://' for basic requests."
 
@@ -24,9 +24,9 @@ class Http:
         try:
             r = requests.post(url=URI)
             if r.status_code == 200:
-                return "Online"
+                return True
             else:
-                return "Offline"
+                return False
         except:
             pass
     

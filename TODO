@@ -23,6 +23,7 @@ Todo:
     ☐ custom user agent
     post:
       ✔ Add POST method @done(19-07-11 17:00)
-      ☐ Add 'HTTP:POST' as valid flag
+      ✔ Add 'HTTP:POST' as valid flag @done(19-07-14 15:30)
   ping.py:
-    ☐ Add responce time
+    ☐ Update Tests for the reworked ping
+    ✔ Add responce time @done(19-07-14 15:30)

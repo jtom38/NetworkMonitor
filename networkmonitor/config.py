@@ -3,6 +3,7 @@ import os
 import time
 import json
 
+from networkmonitor.collections import Nodes
 class Config:
     """
     About:
@@ -10,24 +11,27 @@ class Config:
     """
 
     def __init__(self, JsonConfig:str):
+        self.jsonConfig = JsonConfig
+        self.nodes = []
         try:
             with open(JsonConfig) as jsonFile:
                 res = json.load(jsonFile)
                 
                 self.SleepTimer:int = res['SleepInterval']
-                self.Nodes = res['Nodes'] 
+                self.__ParseNodes(res)
+                #self.Nodes = res['Nodes'] 
         except Exception:
-            print(f'Failed to load {JsonConfig}')
+            print(f'Failed to load {self.jsonConfig}')
         
         pass
 
     def UpdateConfig(self):
         while True:
-            if os.path.exists('config.json') == True:
+            if os.path.exists(self.jsonConfig) == True:
                 # found the file
                 try:
-                    cfg = Config('config.json')
-                    if cfg.Nodes != "":
+                    cfg = Config(self.jsonConfig)
+                    if cfg.nodes != "":
                         return cfg
                 except Exception:
                     print("Trying again in 30 seconds.")
@@ -35,20 +39,28 @@ class Config:
             else:
                 print("No config.json was found.  Exiting...")
                 exit()
-   
-    def __ParseInterval(self, json:str):
-        """
-        About:
-        This checks the json that was sent to see if we can get the sleep timer value
-        """
-        self.SleepTimer:int = json['SleepInterval'] 
-        pass
 
     def __ParseNodes(self, json:str):
         for d in json['Nodes']:
-            print(d['Name'])
-        pass
+            try:
+                node = Nodes(d['Name'], d['Address'], d['Protocol'])
+            except:
+                pass
+            
+            try:
+                if d['Required'] == True:
+                    node.required = True
+            except:
+                node.required = False
 
-#if __name__ == "__main__":
-    #Config
-    #pass
+            try:
+                c:str = d['Category']
+                if c.__contains__('') == True:
+                    node.category == ''
+                else:
+                    node.category == c
+            except:
+                node.category = ''
+
+            self.nodes.append(node)
+        pass

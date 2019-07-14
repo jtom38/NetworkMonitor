@@ -33,27 +33,17 @@ def init():
         # Insert a header
         output.InsertHeader()
 
-        for node in cfg.Nodes:
+        for node in cfg.nodes:
             # Generate friendly vars
             try:
-                nodeName:str        = node['Name']
-                nodeAddress:str     = node["Address"]
-                nodeProtocol:str    = node["Protocol"]
+                nodeName:str        = node.name
+                nodeAddress:str     = node.address
+                nodeProtocol:str    = node.protocol
             except:
-                raise InvalidNodeConfiguration(f"A node is missing one of the required properties."
-                    "Please make sure all nodes have the following."
+                raise InvalidNodeConfiguration(f"A node is missing one of the required properties. "
+                    "Please make sure all nodes have the following. "
                     "Name, Address and Protocol")
-
-            try:
-                nodeRequired:bool   = node["Required"]
-            except:
-                pass
-
-            try:                
-                nodeCategory:str    = node["Category"]
-            except:
-                pass
-
+            nodeCategory            = node.category
 
             np = nodeProtocol.lower()
             if np == "icmp":               
@@ -71,10 +61,11 @@ def init():
             else:
                 raise InvalidProtocol(f"{nodeProtocol} is invalid. Use ICMP, HTTP:Get, HTTP:POST.")
                 
-            name = output.AdjustColumn(nodeName, 20)
-            status = output.AdjustColumn(status, 10)    
+            name        = output.AdjustColumn(nodeName, 20)
+            status      = output.AdjustColumn(status, 10)
+            category    = output.AdjustColumn(nodeCategory, 20)
             
-            output.AddRow(f"{name}{status}{protocol}")
+            output.AddRow(f"{name}{status}{protocol}{category}")
             
             # Check to see if we have nodes under this level
 
