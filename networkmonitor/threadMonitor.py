@@ -35,14 +35,16 @@ class Monitor():
             requirement:bool = True
 
             for node in self.report:
-
+                #n:Nodes
+                #n.
                 if requirement == True:
 
                     np = node.protocol.lower()
                     if np == "icmp":
                         
                         node.status = self.p.PingHost(node.address)
-                        #protocol = self.o.AdjustColumn("ICMP", 10)
+                        node.ms = self.p.ms
+                        node.status = self.p.Status
                     elif np == "http:get":
                         node.status = self.h.Get(node.address)
                         #protocol = self.o.AdjustColumn("HTTP:GET", 10)

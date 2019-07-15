@@ -36,6 +36,7 @@ class Nodes():
         self.required:bool  = False
         self.category:str   = ''
         self.status:str     = ''
+        self.ms:int         = -1
         self.message:str    = ''
         pass
 

@@ -2,7 +2,7 @@ import platform
 #from subprocess import DEVNULL, STDOUT, call, run
 import subprocess
 
-from .terminal import TerminalOutput
+#from .terminal import TerminalOutput
 
 class Ping:
 
@@ -26,8 +26,6 @@ class Ping:
 
             self.__ProcessReturnCode(d.returncode)
             self.__ProcessTravelTime(d.stdout)
-            #d = subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True)
-            #print(d)
             
         except:
             pass
@@ -55,8 +53,22 @@ class Ping:
             self.Status = 'Offline'
 
     def __ProcessTravelTime(self, stdout:str):
+        s:str = str(stdout)
+
         if platform.system().lower() == 'windows':
             pass
         else:
-            i = stdout.find("time=",0, stdout.__len__())
-            print(i)
+
+            # Extract the first value
+            time = s.find('time')
+            ms = s.find(' ms')
+            t = s[time:ms]
+            time:str = t.replace('time=', '')
+
+            # Remove .xxx
+            i = time.find('.')
+            t = time[0:i]
+            
+            # store the result
+            self.ms = int(t)
+        
