@@ -3,9 +3,10 @@ import curses
 from networkmonitor import CursesHelper, TerminalOutput, LogsCol
 
 class uiLogs():
+    logs = []
 
     def __init__(self):
-        self.logs = []
+        #self.logs = []
         pass
 
     def Start(self):

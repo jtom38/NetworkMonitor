@@ -15,6 +15,7 @@ class Http:
     def Get(self, URI: str):
 
         try:
+            self.URI = URI
             r = requests.get(URI)
 
             self.ms = r.elapsed.microseconds
@@ -30,6 +31,7 @@ class Http:
     def Post(self, URI:str):
         
         try:
+            self.URI = URI
             r = requests.post(url=URI)
             self.ms = r.elapsed.microseconds
             if r.status_code == 200:

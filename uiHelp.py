@@ -37,8 +37,6 @@ class uiHelp():
             ch.GetCharacter()
 
         ch.WindowClose()
-
-        pass
  
     def __InsertTitle(self, stdscr):
         title = "Network Monitor"

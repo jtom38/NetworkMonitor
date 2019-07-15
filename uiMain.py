@@ -1,14 +1,19 @@
 
 import curses
-from networkmonitor import CursesHelper, TerminalOutput, LogsCol, Monitor
+import threading
+import time
+from datetime import datetime
+from networkmonitor import CursesHelper, TerminalOutput, LogsCol, Monitor, globalVars
 from uiLogs import uiLogs
 from uiHelp import uiHelp
 
 class uiMain():
-
     def __init__(self):
         self.logs = []
         self.monitor = Monitor("config.json")
+        self.o = TerminalOutput()
+
+        #self.tMonitor = threading.Thread(target=self.monitor.Start, daemon=True)
         pass
 
     def Start(self):
@@ -23,16 +28,12 @@ class uiMain():
         ch = CursesHelper()
         ch.stdscr = stdscr
 
-        o = TerminalOutput()
-        l = uiLogs()
-        h = uiHelp()
+        #th = threading.Thread(target=self.monitor.Start, daemon=True)
+        #th.start()
 
         self.monitor.Start()
-        
-        i = 0
-        while i < 10:
-            self.logs.insert(self.logs.__len__()+1 ,LogsCol(level='debug', message='Unable to reach service.', name='Google', address="www.google.com", protocol='ICMP') )
-            i = i+1
+
+        self.__GenLogData()
 
         # clear the scree and refresh
         ch.WindowClear()
@@ -44,9 +45,16 @@ class uiMain():
         curses.init_pair(2, curses.COLOR_RED, curses.COLOR_BLACK)
         curses.init_pair(3, curses.COLOR_BLACK, curses.COLOR_WHITE)
 
+        # Refresh the screen with new data every 5 seconds
+        
+        dtRefresh = datetime.now()
+
         # Checking to see if the last key that was entered was 'F12'
         while (ch.key != curses.KEY_F12):
-            
+            #dtCurrent = datetime.now()
+            #if dtCurrent.second - 5 >= dtRefresh.second:
+            #    self.tMonitor.start()
+
             ch.WindowClear()
             #stdscr.clear()
 
@@ -58,30 +66,14 @@ class uiMain():
                 pass
 
             elif ch.key == curses.KEY_F10:
-                h.Start()
-
-                ch = CursesHelper()
-                ch.stdscr = stdscr
-                ch.WindowClear()
-                ch.WindowRefresh()
-                ch.key = 0
-
+                ch = self.__TuiHelp(stdscr)
             elif ch.key == curses.KEY_F2:                
-                l.logs = self.logs
-                l.Start()        
-
-                # Once we come back here, update ch with the current stdscr
-                # Helps to make the window accept input again
-                ch = CursesHelper()
-                ch.stdscr = stdscr  
-                ch.WindowClear()
-                ch.WindowRefresh()
-                ch.key = 0 
+                ch = self.__TuiLogs(stdscr)
             else:
                 # Render title
                 self.__InsertTitle(stdscr)                
                 self.__InsertColHeader(stdscr, ch)
-                self.__InsertLine(stdscr, o, ch, 2)
+                self.__InsertLine(stdscr, ch, 2)
                 self.__InsertFooter(stdscr, ch)
 
                 ch.CursorMove()
@@ -90,12 +82,42 @@ class uiMain():
 
                 ch.GetCharacter()
                 pass
-
-           #key = stdscr.getch()
+            
+            
         
         # Close key was pressed
-        ch.WindowClose()            
+        ch.WindowClose()           
 
+    def __GenLogData(self):
+        i = 0
+        while i < 10:
+            self.logs.insert(self.logs.__len__()+1 ,LogsCol(level='debug', message='Unable to reach service.', name='Google', address="www.google.com", protocol='ICMP') )
+            i = i+1
+
+    def __TuiHelp(self, stdscr):
+        h = uiHelp()
+        h.Start()
+
+        ch = CursesHelper()
+        ch.stdscr = stdscr
+        ch.WindowClear()
+        ch.WindowRefresh()
+        ch.key = 0
+        return ch
+
+    def __TuiLogs(self, stdscr):
+        l = uiLogs()
+        l.logs = self.logs
+        l.Start()        
+
+        # Once we come back here, update ch with the current stdscr
+        # Helps to make the window accept input again
+        ch = CursesHelper()
+        ch.stdscr = stdscr  
+        ch.WindowClear()
+        ch.WindowRefresh()
+        ch.key = 0 
+        return ch
 
     def __InsertTitle(self, stdscr):
         title           = "NetworkMonitor"
@@ -125,13 +147,16 @@ class uiMain():
         stdscr.attroff(curses.color_pair(3))
         pass
 
-    def __InsertLine(self, stdscr, o: TerminalOutput, ch: CursesHelper ,yCord):
-        res         = "Online"
-        lName       = o.AdjustColumn("Google", ch.width/3)
-        lStatus     = o.AdjustColumn(res, ch.width/3)
-        lProtocol   = o.AdjustColumn("ICMP", ch.width/3)
-        line:str    = f"{lName}{lStatus}{lProtocol}"
-        stdscr.addstr(yCord,0, line)
+    def __InsertLine(self, stdscr, ch: CursesHelper ,yCord):
+        o = TerminalOutput()
+        reports = self.monitor.report
+        for i in reports:
+            lName       = o.AdjustColumn(i.name, ch.width/3)
+            lStatus     = o.AdjustColumn(i.status, ch.width/3)
+            lProtocol   = o.AdjustColumn(i.protocol.upper(), ch.width/3)
+            line:str    = f"{lName}{lStatus}{lProtocol}"
+            stdscr.addstr(yCord,0, line)
+            yCord = yCord+1
         pass
 
 if __name__ == "__main__":
