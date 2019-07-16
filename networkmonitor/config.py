@@ -3,7 +3,8 @@ import os
 import time
 import json
 
-from networkmonitor.collections import Nodes
+from networkmonitor.src import Nodes
+
 class Config:
     """
     About:

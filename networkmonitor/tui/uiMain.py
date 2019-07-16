@@ -1,11 +1,13 @@
 
 import curses
 import threading
-import time
+import datetime
 from datetime import datetime
-from networkmonitor import CursesHelper, TerminalOutput, LogsCol, Monitor, globalVars
-from uiLogs import uiLogs
-from uiHelp import uiHelp
+from networkmonitor import CursesHelper, TerminalOutput, Monitor, Helper
+from networkmonitor.src import LogsCol
+from networkmonitor.tui import uiLogs, uiHelp
+#from uiLogs import uiLogs
+#from uiHelp import uiHelp
 
 class uiMain():
     def __init__(self):
@@ -31,7 +33,7 @@ class uiMain():
         #th = threading.Thread(target=self.monitor.Start, daemon=True)
         #th.start()
 
-        self.monitor.Start()
+        self.monitor.Start(True)
 
         self.__GenLogData()
 
@@ -51,26 +53,24 @@ class uiMain():
 
         # Checking to see if the last key that was entered was 'F12'
         while (ch.key != curses.KEY_F12):
-            #dtCurrent = datetime.now()
-            #if dtCurrent.second - 5 >= dtRefresh.second:
-            #    self.tMonitor.start()
-
             ch.WindowClear()
             #stdscr.clear()
 
             # Tells us the screens height and width      
             ch.CursorMove()
 
-            if ch.key == ord('q'):
-                # Exit application
-                pass
-
+            if ch.key == curses.KEY_F2:
+                self.monitor.Start(force=True)
+                ch.WindowClear()
+                ch.WindowRefresh()
+                ch.key = 0
             elif ch.key == curses.KEY_F10:
                 ch = self.__TuiHelp(stdscr)
-            elif ch.key == curses.KEY_F2:                
+            elif ch.key == curses.KEY_F9:                
                 ch = self.__TuiLogs(stdscr)
             else:
                 # Render title
+                self.monitor.Start()
                 self.__InsertTitle(stdscr)                
                 self.__InsertColHeader(stdscr, ch)
                 self.__InsertLine(stdscr, ch, 2)
@@ -82,9 +82,6 @@ class uiMain():
 
                 ch.GetCharacter()
                 pass
-            
-            
-        
         # Close key was pressed
         ch.WindowClose()           
 
@@ -120,14 +117,16 @@ class uiMain():
         return ch
 
     def __InsertTitle(self, stdscr):
-        title           = "NetworkMonitor"
+        h = Helper()
+        res = h.GetNextNodeRefreshTime(self.monitor.c.SleepTimer, self.monitor.LastRefresh)
+        title           = f"NetworkMonitor - Refresh@{res}"
         stdscr.attron(curses.color_pair(3))
         stdscr.addstr(0, 0, title, curses.color_pair(1))
         stdscr.attroff(curses.color_pair(3))
         pass
 
     def __InsertFooter(self, stdscr, ch: CursesHelper):
-        statusbarstr    = "|F2|Logs  |F10|Help  |F12|Quit"
+        statusbarstr    = "|F2|Refresh |F9|Logs  |F10|Help  |F12|Quit"
         stdscr.attron(curses.color_pair(3))
         stdscr.addstr(ch.height-1, 0, statusbarstr)
         stdscr.addstr(ch.height-1, len(statusbarstr), " " * (ch.width - len(statusbarstr) - 1))
