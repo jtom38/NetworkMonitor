@@ -15,6 +15,9 @@ Todo:
     ✔ Add DateTime value for when the event took place @done(19-07-11 16:59)
 
   TUI:
+    Main:
+      ✔ Unblock the window from window.getch() @done(19-07-16 21:29)
+
     Logs:
       ☐  Add filters
         ☐ Filter by Name

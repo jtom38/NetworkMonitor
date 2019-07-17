@@ -10,6 +10,7 @@ class CursesHelper():
         #curses.cbreak()
         #self.stdscr.keypad(True)
         self.stdscr = self.WindowNew()
+        self.stdscr.nodelay(True)
         #self.stdscr     = stdscr
 
         curses.start_color()

@@ -28,10 +28,11 @@ class uiMain():
     def __RenderWindow(self, stdscr):
 
         ch = CursesHelper()
-        ch.stdscr = stdscr
 
-        #th = threading.Thread(target=self.monitor.Start, daemon=True)
-        #th.start()
+        # Make this window not block.
+        # Lets the window keep looping but at the same time watches for key strokes
+        stdscr.nodelay(True)
+        ch.stdscr = stdscr
 
         self.monitor.Start(True)
 
@@ -71,17 +72,19 @@ class uiMain():
             else:
                 # Render title
                 self.monitor.Start()
+                ch.WindowRefresh()
                 self.__InsertTitle(stdscr)                
                 self.__InsertColHeader(stdscr, ch)
                 self.__InsertLine(stdscr, ch, 2)
                 self.__InsertFooter(stdscr, ch)
 
-                ch.CursorMove()
+                #ch.CursorMove()
                 # Update the screen
-                ch.WindowRefresh()
-
-                ch.GetCharacter()
-                pass
+            ch.WindowRefresh()
+            ch.GetCharacter()
+                
+            
+            
         # Close key was pressed
         ch.WindowClose()           
 

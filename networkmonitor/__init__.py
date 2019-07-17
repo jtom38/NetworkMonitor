@@ -6,5 +6,5 @@ from .config import *
 from .terminal import *
 from .http import *
 from .cursesHelper import *
-from .threadMonitor import *
+from .monitor import *
 from .helper import * 
