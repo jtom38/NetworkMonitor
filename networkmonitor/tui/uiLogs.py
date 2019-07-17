@@ -19,6 +19,7 @@ class uiLogs():
     def __RenderWindow(self, stdscr):
         ch = CursesHelper()
         ch.stdscr = stdscr
+        ch.SetCharacterBlockingMode(False)
 
         ch.WindowClear()
         ch.WindowRefresh()

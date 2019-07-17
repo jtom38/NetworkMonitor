@@ -10,7 +10,7 @@ class CursesHelper():
         #curses.cbreak()
         #self.stdscr.keypad(True)
         self.stdscr = self.WindowNew()
-        self.stdscr.nodelay(True)
+        #self.stdscr.nodelay(True)
         #self.stdscr     = stdscr
 
         curses.start_color()
@@ -42,10 +42,13 @@ class CursesHelper():
         self.stdscr.clear()
         pass
 
-    def WindowRefresh(self):
+    def UpdateScreenSize(self):
         height, width   = self.stdscr.getmaxyx()
         self.height     = int(height)
         self.width      = int(width)
+
+
+    def WindowRefresh(self):
         self.stdscr.refresh()
 
     def WindowHeight(self):
@@ -95,3 +98,9 @@ class CursesHelper():
         """
         self.key = self.stdscr.getch()
         #self.uniKey = self.stdscr.getkey()
+
+    def SetCharacterBlockingMode(self, BlockingEnabled:bool):
+        if BlockingEnabled == True:
+            self.stdscr.nodelay(True)
+        else:
+            self.stdscr.nodelay(False)

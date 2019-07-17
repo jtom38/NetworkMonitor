@@ -2,6 +2,7 @@
 import curses
 import threading
 import datetime
+import time
 from datetime import datetime
 from networkmonitor import CursesHelper, TerminalOutput, Monitor, Helper
 from networkmonitor.src import LogsCol
@@ -31,7 +32,9 @@ class uiMain():
 
         # Make this window not block.
         # Lets the window keep looping but at the same time watches for key strokes
-        stdscr.nodelay(True)
+        #stdscr.nodelay(True)
+
+        curses.halfdelay(10)
         ch.stdscr = stdscr
 
         self.monitor.Start(True)
@@ -54,7 +57,7 @@ class uiMain():
 
         # Checking to see if the last key that was entered was 'F12'
         while (ch.key != curses.KEY_F12):
-            ch.WindowClear()
+            #ch.WindowClear()
             #stdscr.clear()
 
             # Tells us the screens height and width      
@@ -67,12 +70,15 @@ class uiMain():
                 ch.key = 0
             elif ch.key == curses.KEY_F10:
                 ch = self.__TuiHelp(stdscr)
+                ch.WindowRefresh()
             elif ch.key == curses.KEY_F9:                
                 ch = self.__TuiLogs(stdscr)
+                ch.WindowRefresh()
             else:
                 # Render title
                 self.monitor.Start()
-                ch.WindowRefresh()
+                #ch.WindowRefresh()
+                ch.UpdateScreenSize()
                 self.__InsertTitle(stdscr)                
                 self.__InsertColHeader(stdscr, ch)
                 self.__InsertLine(stdscr, ch, 2)
@@ -80,10 +86,9 @@ class uiMain():
 
                 #ch.CursorMove()
                 # Update the screen
-            ch.WindowRefresh()
+            #ch.WindowRefresh()
             ch.GetCharacter()
-                
-            
+            #time.sleep(.1)             
             
         # Close key was pressed
         ch.WindowClose()           
@@ -99,7 +104,9 @@ class uiMain():
         h.Start()
 
         ch = CursesHelper()
+        curses.halfdelay(10)
         ch.stdscr = stdscr
+        ch.SetCharacterBlockingMode(True)
         ch.WindowClear()
         ch.WindowRefresh()
         ch.key = 0
@@ -113,7 +120,9 @@ class uiMain():
         # Once we come back here, update ch with the current stdscr
         # Helps to make the window accept input again
         ch = CursesHelper()
+        curses.halfdelay(10)
         ch.stdscr = stdscr  
+        ch.SetCharacterBlockingMode(True)
         ch.WindowClear()
         ch.WindowRefresh()
         ch.key = 0 
@@ -122,7 +131,7 @@ class uiMain():
     def __InsertTitle(self, stdscr):
         h = Helper()
         res = h.GetNextNodeRefreshTime(self.monitor.c.SleepTimer, self.monitor.LastRefresh)
-        title           = f"NetworkMonitor - Refresh@{res}"
+        title           = f"|NetworkMonitor |Refresh@{res}| "
         stdscr.attron(curses.color_pair(3))
         stdscr.addstr(0, 0, title, curses.color_pair(1))
         stdscr.attroff(curses.color_pair(3))
@@ -138,10 +147,11 @@ class uiMain():
 
     def __InsertColHeader(self, stdscr, ch:CursesHelper):
         o = TerminalOutput()
-        hName           = o.AdjustColumn("Name", ch.width/3)
-        hStatus         = o.AdjustColumn("Status", ch.width/3)
-        hProtocol       = o.AdjustColumn("Protocol", ch.width/3)        
-        header          = f"{hName}{hStatus}{hProtocol}"
+        hName           = o.AdjustColumn("Name", ch.width/4)
+        hStatus         = o.AdjustColumn("Status", ch.width/4)
+        hProtocol       = o.AdjustColumn("Protocol", ch.width/4)        
+        hMs             = o.AdjustColumn("MS", ch.width/4)
+        header          = f"{hName}{hStatus}{hProtocol}{hMs}"
         
         stdscr.attron(curses.color_pair(3))
         stdscr.addstr(1, 0, header)
@@ -153,10 +163,11 @@ class uiMain():
         o = TerminalOutput()
         reports = self.monitor.report
         for i in reports:
-            lName       = o.AdjustColumn(i.name, ch.width/3)
-            lStatus     = o.AdjustColumn(i.status, ch.width/3)
-            lProtocol   = o.AdjustColumn(i.protocol.upper(), ch.width/3)
-            line:str    = f"{lName}{lStatus}{lProtocol}"
+            lName       = o.AdjustColumn(i.name, ch.width/4)
+            lStatus     = o.AdjustColumn(i.status, ch.width/4)
+            lProtocol   = o.AdjustColumn(i.protocol.upper(), ch.width/4)
+            lMs         = o.AdjustColumn(str(i.ms), ch.width/4)
+            line:str    = f"{lName}{lStatus}{lProtocol}{lMs}"
             stdscr.addstr(yCord,0, line)
             yCord = yCord+1
         pass
