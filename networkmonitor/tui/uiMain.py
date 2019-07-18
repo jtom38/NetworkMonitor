@@ -49,7 +49,9 @@ class uiMain():
         curses.start_color()
         curses.init_pair(1, curses.COLOR_MAGENTA, curses.COLOR_BLACK)
         curses.init_pair(2, curses.COLOR_RED, curses.COLOR_BLACK)
+        curses.init_pair(4, curses.COLOR_GREEN, curses.COLOR_BLACK)
         curses.init_pair(3, curses.COLOR_BLACK, curses.COLOR_WHITE)
+
 
         # Refresh the screen with new data every 5 seconds
         
@@ -131,7 +133,7 @@ class uiMain():
     def __InsertTitle(self, stdscr):
         h = Helper()
         res = h.GetNextNodeRefreshTime(self.monitor.c.SleepTimer, self.monitor.LastRefresh)
-        title           = f"|NetworkMonitor |Refresh@{res}| "
+        title           = f"|NetworkMonitor |Refresh@{res} | "
         stdscr.attron(curses.color_pair(3))
         stdscr.addstr(0, 0, title, curses.color_pair(1))
         stdscr.attroff(curses.color_pair(3))
@@ -168,7 +170,16 @@ class uiMain():
             lProtocol   = o.AdjustColumn(i.protocol.upper(), ch.width/4)
             lMs         = o.AdjustColumn(str(i.ms), ch.width/4)
             line:str    = f"{lName}{lStatus}{lProtocol}{lMs}"
-            stdscr.addstr(yCord,0, line)
+            if i.status == "Offline":
+                stdscr.attron(curses.color_pair(2))
+                stdscr.addstr(yCord,0, line)
+                stdscr.attroff(curses.color_pair(2))
+            elif i.status == "Online":
+                stdscr.attron(curses.color_pair(4))
+                stdscr.addstr(yCord,0, line)
+                stdscr.attroff(curses.color_pair(4))
+            else:
+                stdscr.addstr(yCord,0, line)
             yCord = yCord+1
         pass
 
