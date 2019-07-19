@@ -3,6 +3,7 @@ import curses
 import threading
 import datetime
 import time
+import typing
 from datetime import datetime
 from networkmonitor import CursesHelper, TerminalOutput, Monitor, Helper
 from networkmonitor.src import LogsCol
@@ -15,18 +16,19 @@ class uiMain():
         self.logs = []
         self.monitor = Monitor(config=config)
         self.o = TerminalOutput()
+        
 
         #self.tMonitor = threading.Thread(target=self.monitor.Start, daemon=True)
         pass
 
-    def Start(self):
+    def Start(self) -> None:
         ch = CursesHelper()
         ch.WindowNew()
         self.__RenderWindow(ch.stdscr)
         #curses.wrapper(self.__RenderWindow)
         pass
     
-    def __RenderWindow(self, stdscr):
+    def __RenderWindow(self, stdscr) -> None:
 
         ch = CursesHelper()
 

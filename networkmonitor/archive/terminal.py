@@ -6,20 +6,11 @@ import colorama
 class TerminalOutput():
 
     def __init__(self):
-        colorama.init()
+        #colorama.init()
         self.output: str = ''
         self.numOfColumns:int = 3
         pass
 
-    def AdjustColumn(self, value:str, Width:int):
-
-        if value.__len__() < Width:
-            while value.__len__() < Width:
-                value = f"{value} "
-
-        elif value.__len__() > Width:
-            value = value[0:Width]
-        return value
 
     def ClearTerminal(self):
         if os.name == 'nt':

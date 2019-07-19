@@ -1,8 +1,6 @@
 import platform
-#from subprocess import DEVNULL, STDOUT, call, run
+import typing
 import subprocess
-
-#from .terminal import TerminalOutput
 
 class Ping:
 
@@ -13,8 +11,9 @@ class Ping:
         pass
 
     def PingHost(self, hostname:str):
-        r"""
+        """
         Pings the requested host.
+
         :param hostname: defines url
         """
 

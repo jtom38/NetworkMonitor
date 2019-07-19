@@ -32,5 +32,23 @@ class Helper():
 
         return f"{hour}:{minute}:{sec}"
 
+    def AdjustColumn(self, value:str, Width:int):
+        """
+        Formats the value to size correctly in the desired width of the column
+
+        :param value: Contains the str that will be displayed
+        :param Width: Defines how many characters wide the text needs to be sized to
+
+        :retuns: str
+        """   
+        if value.__len__() < Width:
+            while value.__len__() < Width:
+                value = f"{value} "
+
+        elif value.__len__() > Width:
+            value = value[0:Width]
+        return value
+
+
 
 

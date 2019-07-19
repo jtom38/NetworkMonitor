@@ -8,7 +8,10 @@ setup(name='networkmonitor',
     url='http://github.com/luther38/networkmonitor',   
     packages=[
         'requests',
-        'colorama'
-    ]
-
+        'click'
+    ],
+    entry_points='''
+        [console_scripts]
+        networkmonitor=networkmonitor:init
+    '''
 )

@@ -1,8 +1,6 @@
 
 import requests
-
-#from .terminal import TerminalOutput
-
+import typing
 
 class Http:
     def __init__(self):
@@ -29,7 +27,6 @@ class Http:
             raise "Make sure the url has 'http://' for basic requests."
 
     def Post(self, URI:str):
-        
         try:
             self.URI = URI
             r = requests.post(url=URI)
