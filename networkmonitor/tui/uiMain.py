@@ -11,9 +11,9 @@ from networkmonitor.tui import uiLogs, uiHelp
 #from uiHelp import uiHelp
 
 class uiMain():
-    def __init__(self):
+    def __init__(self, config):
         self.logs = []
-        self.monitor = Monitor("config.json")
+        self.monitor = Monitor(config=config)
         self.o = TerminalOutput()
 
         #self.tMonitor = threading.Thread(target=self.monitor.Start, daemon=True)

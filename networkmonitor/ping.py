@@ -13,6 +13,10 @@ class Ping:
         pass
 
     def PingHost(self, hostname:str):
+        r"""
+        Pings the requested host.
+        :param hostname: defines url
+        """
 
         self.URI = hostname
 

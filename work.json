@@ -2,7 +2,7 @@
     "SleepInterval": 120,
     "Nodes": [
         {
-            "Name":"LocalHost",
+            "Name":"work",
             "Address":"127.0.0.1",
             "Protocol":"icmp",
             "Required": true,

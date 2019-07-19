@@ -10,8 +10,8 @@ def test_ProcessIcmpHttp():
     Tests ProcessIcmp() with a http://www address   
     """
     p = Ping()
-    res = p.ProcessICMP("http://www.google.com")
-    if res == "Offline":
+    p.PingHost("http://www.google.com")
+    if p.Status == "Online":
         assert True
     else:
         assert False
@@ -21,19 +21,19 @@ def test_ProcessIcmpWww():
     Tests ProcessIcmp() with a www address
     """
     p = Ping()
-    res = p.ProcessICMP("www.google.com")
-    if res == "Online":
+    p.PingHost("www.google.com")
+    if p.Status == "Online":
         assert True
     else:
         assert False
 
-def test_PingHostLocalHost():
+def test_PingHostLocalHostMS():
     """
     Tests PingHost to Localhost address
     """
     p = Ping()
-    res = p.PingHost("localhost")
-    if res == 0:
+    p.PingHost("localhost")
+    if p.ms == 0:
         assert True
     else:
         assert False
@@ -44,8 +44,8 @@ def test_PingHostHttp():
     Tests PingHost with a http://www address
     """
     p = Ping()
-    res = p.PingHost("http://www.google.com")
-    if res != 0:
+    p.PingHost("http://www.google.com")
+    if p.ms != -1:
         assert True
     else:
         assert False
