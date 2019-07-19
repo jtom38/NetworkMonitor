@@ -9,9 +9,15 @@ from networkmonitor.tui import uiMain
 
 @click.command()
 @click.option('--config', default='config.json', help='json configuration file to load')
+@click.option('--newconfig', default=False, help='Generates a new configuration file')
 def init(config):
     """
-    Init is the applications start point.  From here we will call in what we need.
+        NetorkMonitor is a curses tool to monitor network nodes.
+        Currently supports ping(icmp), Http: Get and Post.
+
+        To get started:
+
+        networkmonitor --config "demo.json" --newconfig
 
     """
     main = uiMain(config)
