@@ -1,0 +1,124 @@
+{
+    "SleepInterval": 120,
+    "Nodes": [
+        {
+            "Name":"LocalHost",
+            "Address":"127.0.0.1",
+            "Protocol":"icmp",
+            "Required": true,
+            "Category":"Internal"
+        },
+        {
+            "Name":"WAN",
+            "Address":"10.10.15.1",
+            "Protocol":"icmp",
+            "Required": true,
+            "Category": "Internal"
+        },   
+        {
+            "Name":"Google",
+            "Address":"http://www.google.com",
+            "Protocol":"icmp",
+            "Required":false,
+            "Category":"External"
+        },
+        {
+            "Name":"Bellevue",
+            "Address": "192.168.36.1",
+            "Protocol":"icmp",
+            "Required": false,
+            "Category": "Meraki"
+        },
+        {
+            "Name":"Bend",
+            "Address": "192.168.32.1",
+            "Protocol":"icmp",
+            "Required": false,
+            "Category": "Meraki"
+        },
+        {
+            "Name":"Clackamas",
+            "Address": "192.168.31.1",
+            "Protocol":"icmp",
+            "Required": false,
+            "Category": "Meraki"
+        },
+        {
+            "Name":"Colo",
+            "Address": "192.168.40.1",
+            "Protocol":"icmp",
+            "Required": false,
+            "Category": "Meraki"
+        },
+        {
+            "Name":"Corvalis",
+            "Address": "192.168.39.1",
+            "Protocol":"icmp",
+            "Required": false,
+            "Category": "Meraki"
+        },
+        {
+            "Name":"Eugene",
+            "Address": "192.168.33.1",
+            "Protocol":"icmp",
+            "Required": false,
+            "Category": "Meraki"
+        },
+        {
+            "Name":"Hollywood",
+            "Address": "192.168.35.1",
+            "Protocol":"icmp",
+            "Required": false,
+            "Category": "Meraki"
+        },
+        {
+            "Name":"Hood River",
+            "Address": "192.168.44.1",
+            "Protocol":"icmp",
+            "Required": false,
+            "Category": "Meraki"
+        },
+        {
+            "Name":"Lincoln City",
+            "Address": "192.168.45.1",
+            "Protocol":"icmp",
+            "Required": false,
+            "Category": "Meraki"
+        },
+        {
+            "Name":"Moses Lake",
+            "Address": "192.168.23.1",
+            "Protocol":"icmp",
+            "Required": false,
+            "Category": "Meraki"
+        },
+        {
+            "Name":"Salmon Creek",
+            "Address": "192.168.41.1",
+            "Protocol":"icmp",
+            "Required": false,
+            "Category": "Meraki"
+        },
+        {
+            "Name":"Spokane",
+            "Address": "192.168.49.1",
+            "Protocol":"icmp",
+            "Required": false,
+            "Category": "Meraki"
+        },
+        {
+            "Name":"USA",
+            "Address": "10.33.15.1",
+            "Protocol":"icmp",
+            "Required": false,
+            "Category": "Meraki"
+        },
+        {
+            "Name":"Uni Place",
+            "Address": "192.168.38.1",
+            "Protocol":"icmp",
+            "Required": false,
+            "Category": "Meraki"
+        }
+    ]
+}

@@ -1,0 +1,36 @@
+{
+    "SleepInterval": 120,
+    "Nodes": [
+        {
+            "Name":     "LocalHost",
+            "Address":  "127.0.0.1",
+            "Protocol": "icmp",
+            "Required": true
+        },
+        {
+            "Name":"WAN",
+            "Address":"192.168.0.1",
+            "Protocol":"icmp"
+        },   
+        {
+            "Name":"Google",
+            "Address":"http://www.google.com",
+            "Protocol":"http:get"
+        },
+        {
+            "Name":"Google",
+            "Address":"www.google.com",
+            "Protocol":"icmp"
+        },
+        {
+            "Name":"Reddit",
+            "Address":"http://www.reddit.com",
+            "Protocol":"HTTP:Get"
+        },
+	    {
+	        "Name": "Youtube",
+	        "Address":"http://www.youtube.com",
+	        "Protocol":"HTTP:Get"
+	    }
+    ]
+}
