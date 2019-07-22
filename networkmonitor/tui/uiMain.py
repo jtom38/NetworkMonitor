@@ -5,7 +5,7 @@ import datetime
 import time
 import typing
 from datetime import datetime
-from networkmonitor import CursesHelper, TerminalOutput, Monitor, Helper
+from networkmonitor import CursesHelper, Monitor
 from networkmonitor.src import LogsCol
 from networkmonitor.tui import uiLogs, uiHelp
 #from uiLogs import uiLogs
@@ -15,7 +15,7 @@ class uiMain():
     def __init__(self, config):
         self.logs = []
         self.monitor = Monitor(config=config)
-        self.o = TerminalOutput()
+        #self.o = TerminalOutput()
         
 
         #self.tMonitor = threading.Thread(target=self.monitor.Start, daemon=True)
@@ -133,8 +133,8 @@ class uiMain():
         return ch
 
     def __InsertTitle(self, stdscr):
-        h = Helper()
-        res = h.GetNextNodeRefreshTime(self.monitor.c.SleepTimer, self.monitor.LastRefresh)
+        
+        res = self.GetNextNodeRefreshTime(self.monitor.c.SleepTimer, self.monitor.LastRefresh)
         title           = f"|NetworkMonitor |Refresh@{res} | "
         stdscr.attron(curses.color_pair(3))
         stdscr.addstr(0, 0, title, curses.color_pair(1))
@@ -150,11 +150,11 @@ class uiMain():
         pass
 
     def __InsertColHeader(self, stdscr, ch:CursesHelper):
-        o = TerminalOutput()
-        hName           = o.AdjustColumn("Name", ch.width/4)
-        hStatus         = o.AdjustColumn("Status", ch.width/4)
-        hProtocol       = o.AdjustColumn("Protocol", ch.width/4)        
-        hMs             = o.AdjustColumn("MS", ch.width/4)
+        #o = TerminalOutput()
+        hName           = ch.AdjustColumn("Name", ch.width/4)
+        hStatus         = ch.AdjustColumn("Status", ch.width/4)
+        hProtocol       = ch.AdjustColumn("Protocol", ch.width/4)        
+        hMs             = ch.AdjustColumn("MS", ch.width/4)
         header          = f"{hName}{hStatus}{hProtocol}{hMs}"
         
         stdscr.attron(curses.color_pair(3))
@@ -164,13 +164,13 @@ class uiMain():
         pass
 
     def __InsertLine(self, stdscr, ch: CursesHelper ,yCord):
-        o = TerminalOutput()
+        #o = TerminalOutput()
         reports = self.monitor.report
         for i in reports:
-            lName       = o.AdjustColumn(i.name, ch.width/4)
-            lStatus     = o.AdjustColumn(i.status, ch.width/4)
-            lProtocol   = o.AdjustColumn(i.protocol.upper(), ch.width/4)
-            lMs         = o.AdjustColumn(str(i.ms), ch.width/4)
+            lName       = ch.AdjustColumn(i.name, ch.width/4)
+            lStatus     = ch.AdjustColumn(i.status, ch.width/4)
+            lProtocol   = ch.AdjustColumn(i.protocol.upper(), ch.width/4)
+            lMs         = ch.AdjustColumn(str(i.ms), ch.width/4)
             line:str    = f"{lName}{lStatus}{lProtocol}{lMs}"
             if i.status == "Offline":
                 stdscr.attron(curses.color_pair(2))
@@ -185,7 +185,33 @@ class uiMain():
             yCord = yCord+1
         pass
 
-if __name__ == "__main__":
-    main = uiMain()
-    main.Start()
-    pass
+    def GetNextNodeRefreshTime(self, sleepTimer:int, lastRefresh:datetime):
+        """
+        Returns the second value before nodes are checked again
+        :param sleepTimer   = Contains the sleep timer value from config
+        :param lastRefresh  = Contains the datetime value of the last refresh
+        """
+        
+        # Convert lastRefresh into long seconds based off sleepTimer value
+        a:float = sleepTimer / 60
+        s:str = str(a)
+        arr = s.split('.')
+
+        if arr.__len__() == 3:
+            hour =      lastRefresh.hour    + int(arr[0])
+            minute =    lastRefresh.minute  + int(arr[1])
+            sec =       lastRefresh.second  + int(arr[2])
+        elif arr.__len__() == 2:
+            hour        = lastRefresh.hour
+            minute      = lastRefresh.minute + int(arr[0])
+            sec         = lastRefresh.second + int(arr[1])
+        elif arr.__len__() == 1:
+            hour        = lastRefresh.hour
+            minute      = lastRefresh.minute
+            sec         = lastRefresh.second + int(arr[1])
+
+
+#if __name__ == "__main__":
+#    main = uiMain()
+#    main.Start()
+#    pass

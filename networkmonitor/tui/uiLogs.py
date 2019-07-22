@@ -1,6 +1,6 @@
 
 import curses
-from networkmonitor import CursesHelper, TerminalOutput
+from networkmonitor import CursesHelper
 from networkmonitor.src import LogsCol
 
 class uiLogs():
@@ -50,7 +50,7 @@ class uiLogs():
         pass
 
     def __InsertColHeader(self, stdscr, width):
-        o = TerminalOutput()
+        o = CursesHelper()
         col = 4
         #level   = o.AdjustColumn("Level", 6)
         dt      = o.AdjustColumn("DateTime", 19)
@@ -65,7 +65,7 @@ class uiLogs():
         pass
 
     def __InsertLines(self, stdscr, height:int, width:int):
-        o = TerminalOutput()
+        o = CursesHelper()
         x = 2        
         col = 4
 

@@ -1,7 +1,7 @@
 
 import time
 import datetime
-from networkmonitor import Ping, Http, TerminalOutput, Config
+from networkmonitor import Ping, Http, Config
 from networkmonitor import Nodes
 from networkmonitor.src import InvalidProtocol, InvalidNodeConfiguration
 
@@ -14,7 +14,7 @@ class Monitor():
     def __init__(self, config:str = ''):
         self.p = Ping()
         self.h = Http()
-        self.o = TerminalOutput()
+        #self.o = Helper()
         self.c = Config(config)
 
         #self.WorkerActive = False
