@@ -198,20 +198,36 @@ class uiMain():
         arr = s.split('.')
 
         if arr.__len__() == 3:
-            hour =      lastRefresh.hour    + int(arr[0])
-            minute =    lastRefresh.minute  + int(arr[1])
-            sec =       lastRefresh.second  + int(arr[2])
+            hour        = self.CleanHourValue(lastRefresh.hour    + int(arr[0]))
+            if hour >= 24:
+                i = hour - 24
+
+            minute      = self.CleanMinuteValue(lastRefresh.minute  + int(arr[1]))
+            sec         = self.CleanMinuteValue(lastRefresh.second  + int(arr[2]))
         elif arr.__len__() == 2:
             hour        = lastRefresh.hour
-            minute      = lastRefresh.minute + int(arr[0])
-            sec         = lastRefresh.second + int(arr[1])
+            minute      = self.CleanMinuteValue(lastRefresh.minute + int(arr[0]))
+            sec         = self.CleanMinuteValue(lastRefresh.second + int(arr[1]))
         elif arr.__len__() == 1:
             hour        = lastRefresh.hour
             minute      = lastRefresh.minute
-            sec         = lastRefresh.second + int(arr[1])
+            sec         = self.CleanMinuteValue(lastRefresh.second + int(arr[1]))
 
+        return f"{hour}:{minute}:{sec}"
 
-#if __name__ == "__main__":
-#    main = uiMain()
-#    main.Start()
-#    pass
+    def CleanHourValue(self, hour:int):
+        if hour >= 24:
+            i = hour - 24
+            hour = 0
+            hour = hour + i
+        
+        return hour
+
+    def CleanMinuteValue(self, minute:int):
+        if minute >= 60:
+            i = minute - 60
+            minute = 0
+            minute = minute + i
+
+        return minute
+
