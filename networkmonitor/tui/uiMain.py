@@ -6,7 +6,7 @@ import time
 import typing
 from datetime import datetime
 from networkmonitor import CursesHelper, Monitor
-from networkmonitor.src import LogsCol
+from networkmonitor.src import LogsCol, CleanTime
 from networkmonitor.tui import uiLogs, uiHelp
 #from uiLogs import uiLogs
 #from uiHelp import uiHelp
@@ -134,7 +134,8 @@ class uiMain():
 
     def __InsertTitle(self, stdscr):
         
-        res = self.GetNextNodeRefreshTime(self.monitor.c.SleepTimer, self.monitor.LastRefresh)
+        #res = self.GetNextNodeRefreshTime(self.monitor.c.SleepTimer, self.monitor.LastRefresh)
+        res = CleanTime().GetNextNodeRefreshTime(self.monitor.c.SleepTimer, self.monitor.LastRefresh)
         title           = f"|NetworkMonitor |Refresh@{res} | "
         stdscr.attron(curses.color_pair(3))
         stdscr.addstr(0, 0, title, curses.color_pair(1))
@@ -184,50 +185,3 @@ class uiMain():
                 stdscr.addstr(yCord,0, line)
             yCord = yCord+1
         pass
-
-    def GetNextNodeRefreshTime(self, sleepTimer:int, lastRefresh:datetime):
-        """
-        Returns the second value before nodes are checked again
-        :param sleepTimer   = Contains the sleep timer value from config
-        :param lastRefresh  = Contains the datetime value of the last refresh
-        """
-        
-        # Convert lastRefresh into long seconds based off sleepTimer value
-        a:float = sleepTimer / 60
-        s:str = str(a)
-        arr = s.split('.')
-
-        if arr.__len__() == 3:
-            hour        = self.CleanHourValue(lastRefresh.hour    + int(arr[0]))
-            if hour >= 24:
-                i = hour - 24
-
-            minute      = self.CleanMinuteValue(lastRefresh.minute  + int(arr[1]))
-            sec         = self.CleanMinuteValue(lastRefresh.second  + int(arr[2]))
-        elif arr.__len__() == 2:
-            hour        = lastRefresh.hour
-            minute      = self.CleanMinuteValue(lastRefresh.minute + int(arr[0]))
-            sec         = self.CleanMinuteValue(lastRefresh.second + int(arr[1]))
-        elif arr.__len__() == 1:
-            hour        = lastRefresh.hour
-            minute      = lastRefresh.minute
-            sec         = self.CleanMinuteValue(lastRefresh.second + int(arr[1]))
-
-        return f"{hour}:{minute}:{sec}"
-
-    def CleanHourValue(self, hour:int):
-        if hour >= 24:
-            i = hour - 24
-            hour = 0
-            hour = hour + i
-        
-        return hour
-
-    def CleanMinuteValue(self, minute:int):
-        if minute >= 60:
-            i = minute - 60
-            minute = 0
-            minute = minute + i
-
-        return minute
-

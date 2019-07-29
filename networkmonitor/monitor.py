@@ -4,6 +4,7 @@ import datetime
 from networkmonitor import Ping, Http, Config
 from networkmonitor import Nodes
 from networkmonitor.src import InvalidProtocol, InvalidNodeConfiguration
+from networkmonitor.src import CleanTime
 
 
 class Monitor():
