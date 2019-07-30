@@ -35,9 +35,11 @@ class CleanTime():
             self.__CleanSecondValue(lastRefresh.second + int(arr[3]))
             self.__CleanMinuteValue(lastRefresh.minute  + int(arr[1]))
             self.__CleanHourValue(lastRefresh.hour    + int(arr[0]))
+
         elif arr.__len__() == 2:
             self.__CleanMinuteValue(lastRefresh.second + int(arr[1]))
             self.__CleanMinuteValue(lastRefresh.minute + int(arr[0]))
+            self.__CleanHourValue(lastRefresh.hour)
             
         elif arr.__len__() == 1:
             self.__CleanMinuteValue(lastRefresh.second + int(arr[1]))
@@ -51,17 +53,23 @@ class CleanTime():
             i = second - 60
             self.second = 0
             self.minute += i        
+        else:
+            self.second = second
 
     def __CleanMinuteValue(self, minute:int):
         if minute >= 60:
             i = minute - 60
             self.minute = 0
             self.hour += i
+        else:
+            self.minute = minute
 
     def __CleanHourValue(self, hour:int):
         if hour >= 24:
             i = hour - 24
             self.hour = 0
+        else:
+            self.hour = hour
 
     def __GetMessage(self):
         s:str = ""
