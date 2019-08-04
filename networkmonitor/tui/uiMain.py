@@ -5,20 +5,19 @@ import datetime
 import time
 import typing
 from datetime import datetime
+
 from networkmonitor import CursesHelper, Monitor
 from networkmonitor.src import LogsCol, CleanTime
 from networkmonitor.tui import uiLogs, uiHelp
-#from uiLogs import uiLogs
-#from uiHelp import uiHelp
+from networkmonitor.src.configuration import IConfig, YamlConfig
 
 class uiMain():
-    def __init__(self, config):
+    def __init__(self, config:IConfig):
         self.logs = []
-        self.monitor = Monitor(config=config)
-        #self.o = TerminalOutput()
         
-
-        #self.tMonitor = threading.Thread(target=self.monitor.Start, daemon=True)
+        if config.ConfigType.__eq__('yaml'):
+            self.cfg = YamlConfig(config)
+        self.monitor = Monitor(config=config)  
         pass
 
     def Start(self) -> None:

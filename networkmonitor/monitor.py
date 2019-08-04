@@ -1,8 +1,8 @@
 
 import time
 import datetime
-from networkmonitor import Ping, Http, Config
-from networkmonitor import Nodes
+from networkmonitor import Ping, Http, OldConfig
+from networkmonitor.src import Nodes
 from networkmonitor.src import InvalidProtocol, InvalidNodeConfiguration
 from networkmonitor.src import CleanTime
 
@@ -16,7 +16,7 @@ class Monitor():
         self.p = Ping()
         self.h = Http()
         #self.o = Helper()
-        self.c = Config(config)
+        self.c = OldConfig(config)
 
         #self.WorkerActive = False
         #self.Status = "Unknown"
