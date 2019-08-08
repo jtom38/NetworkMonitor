@@ -3,26 +3,22 @@
 class IConfig:
     """
     IConfig is a interface to be used with the configuration loader.
-    This acts as a template for how the Config works
+    This acts as a template for how the Config works.
+    Once this is filled in call ConfigContext and pass this in
     """
 
     def __init__(self, PathConfig:str, NewConfig = False):
         self.PathConfig:str = PathConfig
-        self.ConfigType:str = ""
         self.NewConfig:bool = NewConfig
-
-        if PathConfig.endswith('.yaml'):
-            self.ConfigType = "yaml"
-        elif PathConfig.endswith(".json"):
-            self.ConfigType = "json"
-        else:
-            self.ConfigType = "error"
         pass
 
-    def UpdateConfig(self):
+    def ReadConfig(self):
+        """
+        Reads the configuration file stored in memory and processes what it finds.
+        """
         pass
 
-    def MakeNewConfig(self):
+    def NewConfig(self):
         """
         When requested we will generated a new configuration file 
         """

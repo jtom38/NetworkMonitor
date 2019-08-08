@@ -5,11 +5,11 @@ import yaml
 from networkmonitor.src.configuration import IConfig
 
 class YamlConfig:
-
     def __init__(self, config: IConfig):
         self.config = config
+        pass
 
-        
+    def ReadConfig(self):
         pass
 
     def NewConfig(self):
@@ -17,6 +17,3 @@ class YamlConfig:
         Generates a new configuration file based off values given to the class
         """
         pass
-
-    
-    
