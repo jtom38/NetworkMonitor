@@ -1,7 +1,8 @@
 
 import time
 import datetime
-from networkmonitor import Ping, Http, OldConfig
+from networkmonitor import OldConfig
+from networkmonitor.src.protocols import IProtocols, Ping, Http, ContextProtocols
 from networkmonitor.src import Nodes
 from networkmonitor.src import InvalidProtocol, InvalidNodeConfiguration
 from networkmonitor.src import CleanTime
@@ -13,8 +14,8 @@ class Monitor():
     """
 
     def __init__(self, config:str = ''):
-        self.p = Ping()
-        self.h = Http()
+        #self.p = Ping()
+        #self.h = Http()
         #self.o = Helper()
         self.c = OldConfig(config)
 
@@ -44,26 +45,37 @@ class Monitor():
         #with self.threadLock:
         #    globalVars.reports = report
 
+        cp = ContextProtocols()
+
         requirement:bool = True
 
         for node in report:
             if requirement == True:
                 np = node.protocol.lower()
                 if np == "icmp":
-                    p = Ping()
-                    p.PingHost(node.address)
-                    node.ms     = p.ms
-                    node.status = p.Status
+                    i = IProtocols(node.address, "ICMP")
+                    cp = ContextProtocols(i)
+                    cp.Start()
+                    #p = Ping()
+                    #p.PingHost(node.address)
+                    node.ms     = cp.MS
+                    node.status = cp.Status
                 elif np == "http:get":
-                    h = Http()
-                    h.Get(node.address)
-                    node.ms     = h.ms
-                    node.status = h.status
+                    #h = Http()
+                    #h.Get(node.address)
+                    i = IProtocols(node.address, "HTTP:Get")
+                    cp = ContextProtocols(i)
+                    cp.Start()
+                    node.ms     = cp.MS
+                    node.status = cp.Status
                 elif np == "http:post":
-                    h = Http()
-                    h.Post(node.address)
-                    node.status = h.status
-                    node.ms     = h.ms
+                    #h = Http()
+                    #h.Post(node.address)
+                    i = IProtocols(node.address, "HTTP:Post")
+                    cp = ContextProtocols(i)
+                    cp.Start()
+                    node.status = cp.Status
+                    node.ms     = cp.MS
                 else:
                     raise InvalidProtocol(f"{node.protocol} is invalid. Use ICMP, HTTP:Get, HTTP:POST.")
 

@@ -1,11 +1,11 @@
 
 
 class IProtocols:
-    def __init__(self):
+    def __init__(self, URI:str, Type:str):
         #self.Status:str = ''
         #self.MS:int     = -1
-        self.URI:str    = ""
-        self.Type:str   = ""
+        self.URI:str    = URI
+        self.Type:str   = Type
         pass
 
     def Start():

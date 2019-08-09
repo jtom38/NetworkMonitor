@@ -2,52 +2,50 @@ import platform
 import typing
 import subprocess
 
-class Ping:
+from networkmonitor.src.protocols import IProtocols
 
-    def __init__(self):
-        self.Status:str = ''
-        self.ms:int     = -1
-        self.URI:str    = ''
+class Ping:
+    def __init__(self, protocol:IProtocols):
+        self.Protocol:IProtocols    = protocol
+
+        self.Status:str             = ''
+        self.ms:int                 = -1
+        #self.URI:str                = ''
         pass
 
-    def PingHost(self, hostname:str):
-        """
+    def Start(self):
+        r"""
         Pings the requested host.
 
         :param hostname: defines url
         """
-
-        self.URI = hostname
-
-        self.__CleanURI()
-
-        cmd = self.__GetCommand()
-
-        #return call(cmd, stdout=DEVNULL, stderr=STDOUT)
+        
+        URI = self.__CleanURI(self.Protocol.URI)
+        cmd = self.__GetCommand(URI)
         try:
             d = subprocess.run(cmd, stdout=subprocess.PIPE ,stderr=subprocess.PIPE)
-
             self.__ProcessReturnCode(d.returncode)
             self.__ProcessTravelTime(d.stdout)
-            
         except:
             pass
 
-    def __CleanURI(self):
-        if self.URI.lower().__contains__('http') == True:
-            self.URI = self.URI.replace("http://", "")
+    def __CleanURI(self, URI:str):
+        if URI.lower().__contains__('http') == True:
+            URI = URI.replace("http://", "")
         
-        if self.URI.lower().__contains__('https://') == True:
-            self.URI = self.URI.replace()
+        if URI.lower().__contains__('https://') == True:
+            URI = URI.replace()
 
-    def __GetCommand(self):
+        return URI
+
+    def __GetCommand(self, URI:str):
         if platform.system().lower() == "windows":       
             param = '-n'
         else:
             param = '-c'
         pass
 
-        return ['ping', param, '1', self.URI]
+        return ['ping', param, '1', URI]
  
     def __ProcessReturnCode(self, returncode:int ):
         if returncode == 0:

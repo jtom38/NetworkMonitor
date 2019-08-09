@@ -2,19 +2,20 @@
 import requests
 import typing
 
+from networkmonitor.src.protocols import IProtocols
+
 class Http:
-    def __init__(self):
+    def __init__(self, protocol:IProtocols):
+        self.protocol   = protocol
         self.URI:str    = ''
         self.status:str = ''
         self.ms:int     = -1
-        
         pass
 
-    def Get(self, URI: str):
+    def Get(self):
 
         try:
-            self.URI = URI
-            r = requests.get(URI)
+            r = requests.get(self.protocol.URI)
 
             self.ms = r.elapsed.microseconds
             if r.status_code == 200:
