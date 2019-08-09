@@ -17,16 +17,16 @@ Nodes:
     Address: 192.168.0.1
     Protocol: icmp
     Required: true
-    category: Local
+    Category: Local
 
   - Name: Google
     Address: google.com
     Protocol: icmp
     Required: false
-    category: External
+    Category: External
 
   - Name: Google
     Address: http://google.com
-    protocol: http
-    required: false
-    category: External
+    Protocol: http
+    Required: false
+    Category: External

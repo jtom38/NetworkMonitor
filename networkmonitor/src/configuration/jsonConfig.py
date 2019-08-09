@@ -10,7 +10,7 @@ class JsonConfig:
     def __init__(self, config:IConfig):
         self.config:IConfig     = config
         self.SleepTimer:int     = -1
-        self.nodes              = []
+        self.Nodes              = []
         pass
 
     def NewConfig(self):
@@ -21,14 +21,6 @@ class JsonConfig:
         if os.path.exists(p) == True:
             # found the file
             self.__JsonUpdateConfig()
-            try:
-                #cfg = Config(self.PathConfig)
-                #if cfg.nodes != "":
-                    #return cfg
-                pass
-            except Exception:
-                print("Trying again in 30 seconds.")
-                time.sleep(30)
         else:
             print(f"{self.config.PathConfig} was not found.  Exiting...")
             exit()
@@ -66,7 +58,7 @@ class JsonConfig:
             except:
                 node.category = ''
 
-            self.nodes.append(node)
+            self.Nodes.append(node)
         pass
 
     

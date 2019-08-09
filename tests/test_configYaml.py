@@ -1,30 +1,26 @@
 
-from networkmonitor.src.configuration import *
-from networkmonitor.src.collections import Nodes
+from networkmonitor.src.configuration import IConfig, YamlConfig, ContextConfig
 
-def test_JsonRead():
-    # Add info into interface
-    i = IConfig("example.json")
+def test_YamlReturnsData():
+    i = IConfig("example.yaml")
+    cc = ContextConfig(i)
+    cc.ReadConfig()
 
-    # Generate our context that will handle the work
-    c = ContextConfig(i)
-    c.ReadConfig()
-
-    if c.Nodes.__len__() >= 1:
+    if cc.Nodes.__len__() >= 1:
         assert True
     pass
 
-def test_JsonContainsSleepInterval():
-    i = IConfig("example.json")
+def test_YamlContainsSleepInterval():
+    i = IConfig("example.yaml")
     c = ContextConfig(i)
     c.ReadConfig()
 
     if c.SleepInterval >= 0:
         assert True
 
-def test_JsonNodesContainNames():
+def test_YamlNodesContainNames():
     # Each node needs to contain a Name:
-    i = IConfig("example.json")
+    i = IConfig("example.yaml")
     c = ContextConfig(i)
     c.ReadConfig()
 
@@ -36,9 +32,9 @@ def test_JsonNodesContainNames():
     
     assert True
 
-def test_JsonNodesContainAddress():
+def test_YamlNodesContainAddress():
     # Each node needs to contain a Name:
-    i = IConfig("example.json")
+    i = IConfig("example.yaml")
     c = ContextConfig(i)
     c.ReadConfig()
 
@@ -50,9 +46,9 @@ def test_JsonNodesContainAddress():
     
     assert True
 
-def test_JsonNodesContainProtocol():
+def test_YamlNodesContainProtocol():
     # Each node needs to contain a Name:
-    i = IConfig("example.json")
+    i = IConfig("example.yaml")
     c = ContextConfig(i)
     c.ReadConfig()
 

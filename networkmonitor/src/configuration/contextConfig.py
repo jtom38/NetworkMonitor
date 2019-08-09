@@ -4,7 +4,7 @@ import os
 from networkmonitor.src.configuration import IConfig, YamlConfig, JsonConfig
 from networkmonitor.src.collections import Nodes
 
-class ConfigContext:
+class ContextConfig:
     """
     ConfigContext is the handler for the IConfig and tells the process who needs to do what.
 
@@ -15,18 +15,18 @@ class ConfigContext:
         self.type:str           = self.__GetConfigType__()
 
         self.SleepInterval:int  = -1
-        self.nodes:Nodes        = []
+        self.Nodes:Nodes        = []
         pass
     
     def ReadConfig(self):
         if self.type == "yaml":
             y = YamlConfig(self.config)
             y.ReadConfig()
-#            self.nodes = y.nodes
+            self.Nodes = y.Nodes
         elif self.type == "json":
             j = JsonConfig(self.config)
             j.ReadConfig()
-            self.nodes = j.nodes
+            self.Nodes = j.Nodes
         else:
             pass
         pass
