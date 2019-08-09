@@ -8,7 +8,9 @@ from networkmonitor.src.collections import Nodes
 
 class JsonConfig:
     def __init__(self, config:IConfig):
-        self.config = config
+        self.config:IConfig     = config
+        self.SleepTimer:int     = -1
+        self.nodes              = []
         pass
 
     def NewConfig(self):
@@ -40,7 +42,7 @@ class JsonConfig:
                 self.__JsonParseNodes(res)
                 #self.Nodes = res['Nodes'] 
         except Exception:
-            print(f'Failed to load {self.PathConfig}')
+            print(f'Failed to load {self.config.PathConfig}')
 
     def __JsonParseNodes(self, json:str):
         for d in json['Nodes']:

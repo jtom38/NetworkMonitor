@@ -37,7 +37,7 @@ def init(config:str, newconfig:bool):
         elif config.__eq__("config.yaml"):
             pass
         else:
-            
+           pass 
 
         
     if config.__eq__("config.json") or config.__eq__("config.yaml"):
