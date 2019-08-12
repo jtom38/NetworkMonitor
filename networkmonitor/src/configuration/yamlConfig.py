@@ -24,7 +24,7 @@ class YamlConfig:
         if os.path.exists(p) == True:
             try:
                 with open(self.config.PathConfig) as yamlFile:
-                    raw = yaml.load(yamlFile)
+                    raw = yaml.safe_load(yamlFile)
                     self.SleepTimer = raw['SleepInterval']
                     self.__ParseNodes(raw)
             except FailedToLoadConfigurationFile:

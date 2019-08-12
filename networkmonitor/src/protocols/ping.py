@@ -9,7 +9,7 @@ class Ping:
         self.Protocol:IProtocols    = protocol
 
         self.Status:str             = ''
-        self.ms:int                 = -1
+        self.MS:int                 = -1
         #self.URI:str                = ''
         pass
 

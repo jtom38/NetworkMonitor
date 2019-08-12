@@ -1,5 +1,6 @@
 
-from networkmonitor.src.protocols import IProtocols, Ping
+from networkmonitor.src.protocols import IProtocols, Ping, Http
+from networkmonitor.src.exceptions import InvalidProtocol
 
 class ContextProtocols:
 
@@ -14,9 +15,14 @@ class ContextProtocols:
     def Start(self):
         if self.protocols.Type.lower() == "icmp":
             p = Ping(self.protocols)
-            p.Start()
-            self.Status = p.Status
-            self.MS = p.ms
-
-        
+        elif self.protocols.Type.lower() == "http:get":
+            p = Http(self.protocols)
+        elif self.protocols.Type.lower() == "http:post":
+            p = Http(self.protocols)
+        else:
+            raise InvalidProtocol(f"Requested protocol is not supported: {self.protocols.Type}")
+            
+        p.Start()
+        self.Status = p.Status
+        self.MS = int(p.MS)
         pass    

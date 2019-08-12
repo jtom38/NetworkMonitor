@@ -8,29 +8,37 @@ class Http:
     def __init__(self, protocol:IProtocols):
         self.protocol   = protocol
         self.URI:str    = ''
-        self.status:str = ''
-        self.ms:int     = -1
+        self.Status:str = ''
+        self.MS:int     = -1
         pass
 
-    def Get(self):
+    def Start(self):
+        self.__CleanAddress__()
 
+        if self.protocol.Type.lower() == "http:get":
+            return self.__Get()
+        elif self.protocol.Type.lower() == "http:post":
+            return self.__Post()
+        
+        pass
+
+    def __Get(self):
         try:
             r = requests.get(self.protocol.URI)
 
-            self.ms = r.elapsed.microseconds
+            self.MS = int(r.elapsed.microseconds)
             if r.status_code == 200:
-                self.status = "Online"
+                self.Status = "Online"
                 return True
             else: 
-                self.status = "Offline"
+                self.Status = "Offline"
                 return False
         except Exception:
             raise "Make sure the url has 'http://' for basic requests."
 
-    def Post(self, URI:str):
+    def __Post(self):
         try:
-            self.URI = URI
-            r = requests.post(url=URI)
+            r = requests.post(self.protocol.URI)
             self.ms = r.elapsed.microseconds
             if r.status_code == 200:
                 self.status = "Online"
@@ -40,3 +48,17 @@ class Http:
                 return False
         except:
             pass
+
+    def __CleanAddress__(self):
+        """
+        This will clean up the address that is given.
+        If the address does not start with "http://", we will add it!
+        """
+        adjustUri: bool = False
+        uri:str = self.protocol.URI
+
+        if uri.startswith("http://") or uri.startswith('https://')== False:
+            adjustUri = True
+                        
+        if adjustUri == True:
+            self.protocol.URI = f"http://{uri}"

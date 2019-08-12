@@ -24,12 +24,15 @@ def test_ProtocolBadURL():
     cp = ContextProtocols(i)
     cp.Start()
 
-    if cp.Status == "Offline":
+    if cp.Status == "Online":
         assert True
 
     pass
 
 def test_ProtocolHttpURL():
+    """
+    This will test to confirm tht we can accept a normal URI.
+    """
     i = IProtocols("http://www.google.com", "HTTP:GET")
     cp = ContextProtocols(i)
     cp.Start()
@@ -51,7 +54,7 @@ def test_ProtocolHttpsURL():
 
 
 def test_ProtocolMS():
-    i = IProtocols("localhost", "ICMP")
+    i = IProtocols("https://www.youtube.com", "HTTP:Get")
     cp = ContextProtocols(i)
     cp.Start()
 
