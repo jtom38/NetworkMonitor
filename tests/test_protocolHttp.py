@@ -1,3 +1,4 @@
+from time import sleep
 
 from networkmonitor.src.protocols import IProtocols, ContextProtocols
 
@@ -33,7 +34,8 @@ def test_ProtocolHttpURL():
     """
     This will test to confirm tht we can accept a normal URI.
     """
-    i = IProtocols("http://www.google.com", "HTTP:GET")
+    sleep(5)
+    i = IProtocols("https://www.gmail.com", "HTTP:GET")
     cp = ContextProtocols(i)
     cp.Start()
 
@@ -43,7 +45,8 @@ def test_ProtocolHttpURL():
     pass
 
 def test_ProtocolHttpsURL():
-    i = IProtocols("https://www.google.com", "HTTP:GET")
+    sleep(5)
+    i = IProtocols("https://www.espn.com", "HTTP:GET")
     cp = ContextProtocols(i)
     cp.Start()
 

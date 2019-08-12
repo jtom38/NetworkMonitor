@@ -29,9 +29,11 @@ class Http:
             self.MS = int(r.elapsed.microseconds)
             if r.status_code == 200:
                 self.Status = "Online"
+                r.close()
                 return True
             else: 
                 self.Status = "Offline"
+                r.close()
                 return False
         except Exception:
             raise "Make sure the url has 'http://' for basic requests."
@@ -42,9 +44,11 @@ class Http:
             self.ms = r.elapsed.microseconds
             if r.status_code == 200:
                 self.status = "Online"
+                r.close()
                 return True
             else:
                 self.status = "Offline"
+                r.close()
                 return False
         except:
             pass

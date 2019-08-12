@@ -5,15 +5,25 @@ import json
 
 from networkmonitor.src.configuration import IConfig
 from networkmonitor.src.collections import Nodes
+from networkmonitor.src.exceptions import FailedToGenerateNewFile
 
-class JsonConfig:
+class JsonConfig(IConfig):
     def __init__(self, config:IConfig):
         self.config:IConfig     = config
-        self.SleepTimer:int     = -1
-        self.Nodes              = []
+        #self.SleepTimer:int     = -1
+        #self.Nodes              = []
         pass
 
-    def NewConfig(self):
+    def NewConfig(self, defaultConfig):
+        if os.path.exists(self.config.PathConfig) == True:
+            raise FailedToGenerateNewFile(f"Attempted to generate a new file at {self.config.PathConfig} because a file was already present.  Pick a different file name or remove the existing file.")
+
+        with open('example.json', mode='r') as default:
+            j = json.load(default)
+
+        with open(self.config.PathConfig, mode='w') as jsonFile:
+            json.dump(j, jsonFile)
+        
         pass
 
     def ReadConfig(self):
@@ -30,7 +40,7 @@ class JsonConfig:
             with open(self.config.PathConfig) as jsonFile:
                 res = json.load(jsonFile)
                 
-                self.SleepTimer:int = res['SleepInterval']
+                self.config.SleepInterval:int = res['SleepInterval']
                 self.__JsonParseNodes(res)
                 #self.Nodes = res['Nodes'] 
         except Exception:
@@ -58,7 +68,7 @@ class JsonConfig:
             except:
                 node.category = ''
 
-            self.Nodes.append(node)
+            self.config.Nodes.append(node)
         pass
 
     

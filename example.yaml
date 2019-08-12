@@ -26,7 +26,7 @@ Nodes:
     Category: External
 
   - Name: Google
-    Address: http://google.com
-    Protocol: http
+    Address: https://google.com
+    Protocol: http:get
     Required: false
     Category: External

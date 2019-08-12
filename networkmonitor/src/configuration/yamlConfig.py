@@ -1,22 +1,33 @@
 
 import os
 import yaml
+import json
 
 from networkmonitor.src.configuration import IConfig
 from networkmonitor.src.collections import Nodes
-from networkmonitor.src.exceptions import FailedToLoadConfigurationFile
+from networkmonitor.src.exceptions import FailedToLoadConfigurationFile, FailedToGenerateNewFile
 
-class YamlConfig:
+class YamlConfig(IConfig):
     def __init__(self, config: IConfig):
         self.config:IConfig     = config
-        self.SleepTimer:int     = -1
-        self.Nodes              = []
+        #self.SleepTimer:int     = -1
+        #self.Nodes              = []
         pass
 
-    def NewConfig(self):
+    def NewConfig(self, defaultConfig):
         """
         Generates a new configuration file based off values given to the class
         """
+        if os.path.exists(self.config.PathConfig) == True:
+            raise FailedToGenerateNewFile(f"Attempted to generate a new file at {self.config.PathConfig} because a file was already present.  Pick a different file name or remove the existing file.")
+
+        with open("example.yaml", mode='r') as default:
+            y = yaml.safe_load(default)
+
+        with open(self.config.PathConfig, mode='w') as yamlFile:
+            yaml.dump(y, yamlFile, default_flow_style=False)
+            
+        
         pass
 
     def ReadConfig(self):
@@ -25,7 +36,8 @@ class YamlConfig:
             try:
                 with open(self.config.PathConfig) as yamlFile:
                     raw = yaml.safe_load(yamlFile)
-                    self.SleepTimer = raw['SleepInterval']
+                    self.config.SleepInterval = raw['SleepInterval']
+                    #self.SleepTimer = raw['SleepInterval']
                     self.__ParseNodes(raw)
             except FailedToLoadConfigurationFile:
                 print(f'Configuration file was found at {p}.  Ran into a problem loading the file into memory.  Was the file locked?  Is the file format wrong?')
@@ -56,5 +68,6 @@ class YamlConfig:
             except:
                 node.category = ''
 
-            self.Nodes.append(node)
+            #self.Nodes.append(node)
+            self.config.Nodes.append(node)
         pass

@@ -19,25 +19,65 @@ class ContextConfig:
         pass
     
     def ReadConfig(self):
-        if self.type == "yaml":
-            y = YamlConfig(self.config)
-            y.ReadConfig()
-            self.Nodes = y.Nodes
-        elif self.type == "json":
-            j = JsonConfig(self.config)
-            j.ReadConfig()
-            self.Nodes = j.Nodes
-        else:
-            pass
+        self.config.ReadConfig()
+        self.Nodes          = self.config.config.Nodes
+        self.SleepInterval  = self.config.config.SleepInterval
+        #if self.type == "yaml":
+        #    y = YamlConfig(self.config)
+        #    y.ReadConfig()
+        #    self.Nodes = y.Nodes
+        #elif self.type == "json":
+        #    j = JsonConfig(self.config)
+        #    j.ReadConfig()
+        #    self.Nodes = j.Nodes
+        #else:
+        #    pass
         pass
 
     def NewConfig(self):
+        """
+        Handler for NewConfig requests.        
+        """
+        default = {
+            "SleepInterval": "120",
+            'Nodes': [
+                {
+                    'Name':'LocalHost',
+                    'Address': '172.0.0.1',
+                    'Protocol': 'ICMP',
+                    'Required': True,
+                    'Category': "local"
+                },
+                {
+                    'Name'      : 'Wan',
+                    'Address'   : '192.168.0.1',
+                    'Protocol'  : 'ICMP',
+                    'Required'  : True,
+                    'Category'  : "Local"
+                },
+                {
+                    'Name'      : 'Google',
+                    'Address'   : 'google.com',
+                    'Protocol'  : 'ICMP',
+                    'Required'  : False,
+                    'Category'  : "External"
+                },
+                {
+                    'Name'      : 'Google',
+                    'Address'   : 'https://google.com',
+                    'Protocol'  : 'Http:Get',
+                    'Required'  : False,
+                    'Category'  : "External"
+                } 
+            ]
+        }
+        self.config.NewConfig(default)        
         pass
 
     def __GetConfigType__(self):
-        if self.config.PathConfig.endswith('yaml'):
+        if self.config.config.PathConfig.endswith('yaml'):
             return 'yaml'
-        elif self.config.PathConfig.endswith('json'):
+        elif self.config.config.PathConfig.endswith('json'):
             return 'json'
         else:
             return None

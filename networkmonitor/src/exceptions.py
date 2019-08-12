@@ -26,3 +26,9 @@ class FailedToLoadConfigurationFile(NetworkMonitorException):
     """
     Raised when we run into a problem loading the requested config file.
     """
+
+class FailedToGenerateNewFile(NetworkMonitorException):
+    """
+    Raised when generating a new config file via CLI.
+    If a file exists already? raise
+    """

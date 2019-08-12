@@ -1,9 +1,11 @@
 
+import os
 from networkmonitor.src.configuration import IConfig, YamlConfig, ContextConfig
 
 def test_YamlReturnsData():
     i = IConfig("example.yaml")
-    cc = ContextConfig(i)
+    y = YamlConfig(i)
+    cc = ContextConfig(y)
     cc.ReadConfig()
 
     if cc.Nodes.__len__() >= 1:
@@ -12,7 +14,8 @@ def test_YamlReturnsData():
 
 def test_YamlContainsSleepInterval():
     i = IConfig("example.yaml")
-    c = ContextConfig(i)
+    y = YamlConfig(i)
+    c = ContextConfig(y)
     c.ReadConfig()
 
     if c.SleepInterval >= 0:
@@ -21,7 +24,8 @@ def test_YamlContainsSleepInterval():
 def test_YamlNodesContainNames():
     # Each node needs to contain a Name:
     i = IConfig("example.yaml")
-    c = ContextConfig(i)
+    y = YamlConfig(i)
+    c = ContextConfig(y)
     c.ReadConfig()
 
     for item in c.Nodes:
@@ -35,7 +39,8 @@ def test_YamlNodesContainNames():
 def test_YamlNodesContainAddress():
     # Each node needs to contain a Name:
     i = IConfig("example.yaml")
-    c = ContextConfig(i)
+    y = YamlConfig(i)
+    c = ContextConfig(y)
     c.ReadConfig()
 
     for item in c.Nodes:
@@ -49,7 +54,8 @@ def test_YamlNodesContainAddress():
 def test_YamlNodesContainProtocol():
     # Each node needs to contain a Name:
     i = IConfig("example.yaml")
-    c = ContextConfig(i)
+    y = YamlConfig(i)
+    c = ContextConfig(y)
     c.ReadConfig()
 
     for item in c.Nodes:
@@ -59,3 +65,24 @@ def test_YamlNodesContainProtocol():
         pass
     
     assert True
+
+
+def test_GenerateNewYaml():
+    f = 'delete.yaml'
+    try:
+        os.remove(f)
+    except:
+        pass
+
+    i = IConfig(f)
+    y = YamlConfig(i)
+    c = ContextConfig(y)
+    c.NewConfig()
+    c.ReadConfig()
+
+    os.remove(f)
+
+    if c.SleepInterval == 120:
+        assert True
+
+    pass

@@ -10,6 +10,9 @@ class IConfig:
     def __init__(self, PathConfig:str, NewConfig = False):
         self.PathConfig:str = PathConfig
         self.NewConfig:bool = NewConfig
+
+        self.SleepTimer:int = -1
+        self.Nodes          = []
         pass
 
     def ReadConfig(self):
@@ -22,5 +25,8 @@ class IConfig:
         """
         When requested we will generated a new configuration file 
         """
+        pass
+
+    def cookie(self):
         pass
         
