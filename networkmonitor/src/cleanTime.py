@@ -95,3 +95,4 @@ class CleanTime():
             h = self.hour
 
         return f"{h}:{m}:{s}"
+     

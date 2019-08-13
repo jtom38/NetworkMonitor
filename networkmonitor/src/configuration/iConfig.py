@@ -1,5 +1,4 @@
 
-
 class IConfig:
     """
     IConfig is a interface to be used with the configuration loader.

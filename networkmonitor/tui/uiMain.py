@@ -137,8 +137,9 @@ class uiMain():
         return ch
 
     def __InsertTitle(self, stdscr):
+        res = self.monitor.GetNextRefresh()
         
-        res = CleanTime().GetNextNodeRefreshTime(self.monitor.iconfig.SleepInterval, self.monitor.LastRefresh)
+        #res = CleanTime().GetNextNodeRefreshTime(self.monitor.iconfig.SleepInterval, self.monitor.LastRefresh)
         title           = f"|NetworkMonitor |Refresh@{res} | "
         stdscr.attron(curses.color_pair(3))
         stdscr.addstr(0, 0, title, curses.color_pair(1))
