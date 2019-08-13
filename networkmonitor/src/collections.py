@@ -20,6 +20,19 @@ class LogsCol():
         pass    
     pass
 
+class Configuration():
+    def __init__(self):
+        self.sleepInterval: SleepInterval   = SleepInterval()
+        self.nodes:Nodes                    = []
+        pass
+
+class SleepInterval():
+    def __init__(self):
+        self.hours      = 0
+        self.minutes    = 0
+        self.seconds    = 0
+        pass
+
 class Nodes():
     """
     NodesCol contains a record for the nodes from the config file.  Use this in an list to store the records.

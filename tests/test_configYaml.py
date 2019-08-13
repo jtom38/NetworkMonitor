@@ -8,7 +8,7 @@ def test_YamlReturnsData():
     cc = ContextConfig(y)
     cc.ReadConfig()
 
-    if cc.Nodes.__len__() >= 1:
+    if cc.configuration.nodes.__len__() >= 1:
         assert True
     pass
 
@@ -18,7 +18,7 @@ def test_YamlContainsSleepInterval():
     c = ContextConfig(y)
     c.ReadConfig()
 
-    if c.SleepInterval >= 0:
+    if c.configuration.sleepInterval.minutes == 2:
         assert True
 
 def test_YamlNodesContainNames():
@@ -28,7 +28,7 @@ def test_YamlNodesContainNames():
     c = ContextConfig(y)
     c.ReadConfig()
 
-    for item in c.Nodes:
+    for item in c.configuration.nodes:
         if item.name == None:
             # Object is missing Name:
             assert False
@@ -43,7 +43,7 @@ def test_YamlNodesContainAddress():
     c = ContextConfig(y)
     c.ReadConfig()
 
-    for item in c.Nodes:
+    for item in c.configuration.nodes:
         if item.address == None:
             # Object is missing Name:
             assert False
@@ -58,7 +58,7 @@ def test_YamlNodesContainProtocol():
     c = ContextConfig(y)
     c.ReadConfig()
 
-    for item in c.Nodes:
+    for item in c.configuration.nodes:
         if item.protocol == None:
             # Object is missing Name:
             assert False
@@ -82,7 +82,17 @@ def test_GenerateNewYaml():
 
     os.remove(f)
 
-    if c.SleepInterval == 120:
+    if c.configuration.sleepInterval.minutes == 2:
         assert True
 
+    pass
+
+def test_FindValidClassToInject():
+    c = ContextConfig(IConfig("example.yaml"))
+    c.GetWorkingConfigClass(True)
+    c.ReadConfig()
+
+    if c.configuration.sleepInterval.minutes == 2:
+        assert True
+    
     pass

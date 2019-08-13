@@ -4,14 +4,14 @@ import time
 import json
 
 from networkmonitor.src.configuration import IConfig
-from networkmonitor.src.collections import Nodes
+from networkmonitor.src.collections import Nodes, SleepInterval
 from networkmonitor.src.exceptions import FailedToGenerateNewFile
 
 class JsonConfig(IConfig):
     def __init__(self, config:IConfig):
-        self.config:IConfig     = config
-        #self.SleepTimer:int     = -1
-        #self.Nodes              = []
+        self.config:IConfig         = config
+        self.sleepInterval:SleepInterval    = SleepInterval()
+        self.nodes                  = []
         pass
 
     def NewConfig(self, defaultConfig):
@@ -40,11 +40,17 @@ class JsonConfig(IConfig):
             with open(self.config.PathConfig) as jsonFile:
                 res = json.load(jsonFile)
                 
-                self.config.SleepInterval:int = res['SleepInterval']
+                #self.config.SleepInterval. = res['SleepInterval']
+                self.__ParseSleepInterval(res['SleepInterval'])
                 self.__JsonParseNodes(res)
                 #self.Nodes = res['Nodes'] 
         except Exception:
             print(f'Failed to load {self.config.PathConfig}')
+
+    def __ParseSleepInterval(self, json:str):
+        self.sleepInterval.hours    = json['Hours']
+        self.sleepInterval.minutes  = json['Minutes']
+        self.sleepInterval.seconds  = json['Seconds']
 
     def __JsonParseNodes(self, json:str):
         for d in json['Nodes']:
@@ -68,7 +74,7 @@ class JsonConfig(IConfig):
             except:
                 node.category = ''
 
-            self.config.Nodes.append(node)
+            self.nodes.append(node)
         pass
 
     

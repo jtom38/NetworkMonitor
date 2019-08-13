@@ -2,36 +2,74 @@
 import os
 
 from networkmonitor.src.configuration import IConfig, YamlConfig, JsonConfig
-from networkmonitor.src.collections import Nodes
+from networkmonitor.src.collections import Configuration
 
 class ContextConfig:
     """
     ConfigContext is the handler for the IConfig and tells the process who needs to do what.
-
+    
     Methods are the same as IConfig
     """
     def __init__(self, config: IConfig):
         self.config:IConfig     = config
         self.type:str           = self.__GetConfigType__()
 
-        self.SleepInterval:int  = -1
-        self.Nodes:Nodes        = []
+        self.configuration      = Configuration()
+        #self.SleepInterval:int  = -1
+        #self.Nodes:Nodes        = []
         pass
-    
+
+    def __GetConfigType__(self):
+
+        # Did we get our IConfig on its own?
+        try:
+            if self.config.PathConfig.endswith('yaml'):
+                return 'yaml'
+            elif self.config.PathConfig.endswith('json'):
+                return 'json'
+            else:
+                return None
+        except:
+            pass
+
+        # it came in with another class attached.
+        # Looks like it should be YamlConfig or JsonConfig then IConfig
+        try:
+            if self.config.config.PathConfig.endswith('yaml'):
+                return 'yaml'
+            elif self.config.config.PathConfig.endswith('json'):
+                return 'json'
+            else:
+                return None
+        except:
+            pass
+
+    def GetWorkingConfigClass(self, replaceConfig:bool = False):
+        """
+        This is used to generate a working class based off the config type.
+        If we know the type and have a class we can use, make a new instance and return it.
+        Currently returns YamlConfig or JsonConfig.
+
+        @param:replaceConfig = If True it will take the generated class and place it in self.config.  If False, return value.
+        """
+        if self.type == "yaml":
+            c = YamlConfig(self.config)
+        elif self.type == "json":
+            c = JsonConfig(self.config)
+        else:
+            pass
+        
+        if replaceConfig == True:
+            self.config = c
+        else:
+            return c
+
     def ReadConfig(self):
         self.config.ReadConfig()
-        self.Nodes          = self.config.config.Nodes
-        self.SleepInterval  = self.config.config.SleepInterval
-        #if self.type == "yaml":
-        #    y = YamlConfig(self.config)
-        #    y.ReadConfig()
-        #    self.Nodes = y.Nodes
-        #elif self.type == "json":
-        #    j = JsonConfig(self.config)
-        #    j.ReadConfig()
-        #    self.Nodes = j.Nodes
-        #else:
-        #    pass
+        self.configuration.nodes = self.config.nodes
+        self.configuration.sleepInterval = self.config.sleepInterval
+        #self.Nodes          = self.config.config.Nodes
+        #self.SleepInterval  = self.config.config.SleepInterval
         pass
 
     def NewConfig(self):
@@ -39,7 +77,11 @@ class ContextConfig:
         Handler for NewConfig requests.        
         """
         default = {
-            "SleepInterval": "120",
+            "SleepInterval":{
+                "Hours": 0,
+                "Minutes": 2,
+                "Seconds": 0
+            },
             'Nodes': [
                 {
                     'Name':'LocalHost',
@@ -74,10 +116,3 @@ class ContextConfig:
         self.config.NewConfig(default)        
         pass
 
-    def __GetConfigType__(self):
-        if self.config.config.PathConfig.endswith('yaml'):
-            return 'yaml'
-        elif self.config.config.PathConfig.endswith('json'):
-            return 'json'
-        else:
-            return None

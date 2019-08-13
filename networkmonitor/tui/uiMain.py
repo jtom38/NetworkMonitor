@@ -9,25 +9,30 @@ from datetime import datetime
 from networkmonitor import CursesHelper, Monitor
 from networkmonitor.src import LogsCol, CleanTime
 from networkmonitor.tui import uiLogs, uiHelp
-from networkmonitor.src.configuration import IConfig, YamlConfig
+from networkmonitor.src.configuration import *
 
 class uiMain():
     def __init__(self, config:IConfig):
+        self.iconfig = config
         self.logs = []
         
-        if config.ConfigType.__eq__('yaml'):
-            self.cfg = YamlConfig(config)
-        self.monitor = Monitor(config=config)  
+        self.config = ContextConfig(config)
+        self.config.GetWorkingConfigClass(True)
+        self.config.ReadConfig()
+
+        self.monitor = Monitor(config=config)
+
+        self.columnCount = 4
         pass
 
-    def Start(self) -> None:
+    def Start(self):
         ch = CursesHelper()
         ch.WindowNew()
         self.__RenderWindow(ch.stdscr)
         #curses.wrapper(self.__RenderWindow)
         pass
     
-    def __RenderWindow(self, stdscr) -> None:
+    def __RenderWindow(self, stdscr):
 
         ch = CursesHelper()
 
@@ -133,8 +138,7 @@ class uiMain():
 
     def __InsertTitle(self, stdscr):
         
-        #res = self.GetNextNodeRefreshTime(self.monitor.c.SleepTimer, self.monitor.LastRefresh)
-        res = CleanTime().GetNextNodeRefreshTime(self.monitor.c.SleepTimer, self.monitor.LastRefresh)
+        res = CleanTime().GetNextNodeRefreshTime(self.monitor.iconfig.SleepInterval, self.monitor.LastRefresh)
         title           = f"|NetworkMonitor |Refresh@{res} | "
         stdscr.attron(curses.color_pair(3))
         stdscr.addstr(0, 0, title, curses.color_pair(1))

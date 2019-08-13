@@ -12,7 +12,7 @@ def test_JsonRead():
     c = ContextConfig(j)
     c.ReadConfig()
 
-    if c.Nodes.__len__() >= 1:
+    if c.configuration.nodes.__len__() >= 1:
         assert True
     pass
 
@@ -22,7 +22,7 @@ def test_JsonContainsSleepInterval():
     c = ContextConfig(j)
     c.ReadConfig()
 
-    if c.SleepInterval >= 0:
+    if c.configuration.sleepInterval.minutes >= 2:
         assert True
 
 def test_JsonNodesContainNames():
@@ -32,7 +32,7 @@ def test_JsonNodesContainNames():
     c = ContextConfig(j)
     c.ReadConfig()
 
-    for item in c.Nodes:
+    for item in c.configuration.nodes:
         if item.name == None:
             # Object is missing Name:
             assert False
@@ -47,7 +47,7 @@ def test_JsonNodesContainAddress():
     c = ContextConfig(j)
     c.ReadConfig()
 
-    for item in c.Nodes:
+    for item in c.configuration.nodes:
         if item.address == None:
             # Object is missing Name:
             assert False
@@ -62,7 +62,7 @@ def test_JsonNodesContainProtocol():
     c = ContextConfig(j)
     c.ReadConfig()
 
-    for item in c.Nodes:
+    for item in c.configuration.nodes:
         if item.protocol == None:
             # Object is missing Name:
             assert False
@@ -79,7 +79,18 @@ def test_NewConfig():
 
     os.remove("delete.json")
 
-    if c.SleepInterval == 120:
+    if c.configuration.sleepInterval.minutes == 2:
+        assert True
+    
+    pass
+
+
+def test_FindValidClassToInject():
+    c = ContextConfig(IConfig("example.json"))
+    c.GetWorkingConfigClass(True)
+    c.ReadConfig()
+
+    if c.configuration.sleepInterval.minutes == 2:
         assert True
     
     pass

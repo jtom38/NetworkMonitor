@@ -1,11 +1,16 @@
 {
-    "SleepInterval": 120,
+    "SleepInterval": {
+        "Hours" : 0,
+        "Minutes": 2,
+        "Seconds": 0
+    },
     "Nodes": [
         {
             "Name":     "LocalHost",
-            "Address":  "127.0.0.1",
+            "Address":  "localhost",
             "Protocol": "icmp",
-            "Required": true
+            "Required": true,
+            "Category":"Local"
         },
         {
             "Name":"WAN",

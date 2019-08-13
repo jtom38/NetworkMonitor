@@ -2,13 +2,16 @@
 # This is the example configuration file for NetworkMonitor
 
 # Defines how long we will wait before checking nodes again
-SleepInterval: 120
+SleepInterval:
+  Hours: 0
+  Minutes: 2
+  Seconds: 0
 
 # Checking to make sure we have a connection to the outside world
 # You will want to place the nodes in the order that you want them tested
 Nodes:
   - Name: LocalHost
-    Address: 172.0.0.1
+    Address: localhost
     Protocol: icmp
     Required: true
     Category: Local

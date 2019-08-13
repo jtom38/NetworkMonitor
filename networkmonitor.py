@@ -1,7 +1,8 @@
 
 import click
 
-from networkmonitor.src.configuration import IConfig, YamlConfig
+from networkmonitor.src.configuration import IConfig, JsonConfig, YamlConfig, ContextConfig 
+from networkmonitor.src import CLI
 
 from networkmonitor.tui import uiMain
 
@@ -10,7 +11,7 @@ from networkmonitor.tui import uiMain
 #    click.echo(f"Do the thing {cfg}!")
 
 @click.command()
-@click.option('--config', default='config.json', help='json configuration file to load')
+@click.option('--config', default='example.yaml', help='json or yaml configuration file to load')
 @click.option('--newconfig', default=False, help='Generates a new configuration file')
 def init(config:str, newconfig:bool):
     """
@@ -18,37 +19,21 @@ def init(config:str, newconfig:bool):
         Currently supports ping(icmp), Http: Get and Post.
 
         To get started:
-        'networkmonitor --config "demo.json" --newconfig'
+        'networkmonitor --config "demo.yaml" --newconfig'
 
     """
 
-    
-    click.echo(f"config:{config}")
+    # Pass all the requested info into the interface
+    cfg = IConfig(config, newconfig)
 
 
-    # Check requirements for --newconfig
-    if newconfig == True:
-        click.echo(f"newConfig: {newconfig}")
-        genNew:bool = False
+    # Once interfaces has been made, we will send them to the CLI worker class
+    cli = CLI(cfg)
 
-        # Check if the requested --config is valid
-        if config.__eq__("config.json"):
-            pass
-        elif config.__eq__("config.yaml"):
-            pass
-        else:
-           pass 
-
+    # Check if NewConfig was requested
+    cli.NewConfig()
         
-    if config.__eq__("config.json") or config.__eq__("config.yaml"):
-        if newconfig == True:
-            print("Invalid commands.  To generate a new configuration run the following flags:")
-            print(" --config 'newConfig.yaml' --newconfig")
-            print('This will generate a new configuration file for you with the name you requested.')
-            exit()
-
-
-    main = uiMain(config)
+    main = uiMain(cfg)
     main.Start()
 
 if __name__ == "__main__":

@@ -34,7 +34,7 @@ class Ping:
             URI = URI.replace("http://", "")
         
         if URI.lower().__contains__('https://') == True:
-            URI = URI.replace()
+            URI = URI.replace("https://", '')
 
         return URI
 
@@ -71,5 +71,5 @@ class Ping:
             t = time[0:i]
             
             # store the result
-            self.ms = int(t)
+            self.MS = int(t)
         

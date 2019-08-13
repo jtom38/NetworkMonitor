@@ -1,26 +1,23 @@
 
-import time
 import datetime
 from networkmonitor import OldConfig
-from networkmonitor.src.protocols import IProtocols, Ping, Http, ContextProtocols
+from networkmonitor.src.configuration import *
+from networkmonitor.src.protocols import *
 from networkmonitor.src import Nodes
 from networkmonitor.src import InvalidProtocol, InvalidNodeConfiguration
 from networkmonitor.src import CleanTime
-
 
 class Monitor():
     """
     Monitor is the working class that checks all the requested nodes.
     """
 
-    def __init__(self, config:str = ''):
-        #self.p = Ping()
-        #self.h = Http()
-        #self.o = Helper()
-        self.c = OldConfig(config)
-
-        #self.WorkerActive = False
-        #self.Status = "Unknown"
+    def __init__(self, config:IConfig):
+        #self.c = OldConfig(config)
+        self.iconfig = config
+        #self.CfgContext = ContextConfig(config)
+        #self.CfgContext.GetWorkingConfigClass(True)
+        #self.CfgContext.ReadConfig()
 
         self.report = []       
         self.LastRefresh = datetime.datetime.now()
@@ -34,46 +31,35 @@ class Monitor():
         else:
             self.__Worker()
         
-
     def __Worker(self):
-
-        #while self.WorkerActive == True:
-        #self.Status = "Alive"
-        self.c.UpdateConfig()
-            
-        report = self.c.nodes
-        #with self.threadLock:
-        #    globalVars.reports = report
-
-        cp = ContextProtocols()
-
+        self.iconfig.ReadConfig
+        report = self.iconfig.Nodes
         requirement:bool = True
 
         for node in report:
             if requirement == True:
                 np = node.protocol.lower()
                 if np == "icmp":
-                    i = IProtocols(node.address, "ICMP")
-                    cp = ContextProtocols(i)
+                    cp = ContextProtocols(IProtocols(node.address, "ICMP"))
+                    cp.GetWorkingClass(True)
                     cp.Start()
-                    #p = Ping()
-                    #p.PingHost(node.address)
+
                     node.ms     = cp.MS
                     node.status = cp.Status
                 elif np == "http:get":
-                    #h = Http()
-                    #h.Get(node.address)
                     i = IProtocols(node.address, "HTTP:Get")
                     cp = ContextProtocols(i)
+                    cp.GetWorkingClass(True)
                     cp.Start()
+
                     node.ms     = cp.MS
                     node.status = cp.Status
                 elif np == "http:post":
-                    #h = Http()
-                    #h.Post(node.address)
                     i = IProtocols(node.address, "HTTP:Post")
                     cp = ContextProtocols(i)
+                    cp.GetWorkingClass(True)
                     cp.Start()
+
                     node.status = cp.Status
                     node.ms     = cp.MS
                 else:
@@ -96,9 +82,41 @@ class Monitor():
         Gets the time of the last update and adds the SleepTimer value and checks if it needs to run again.
         Returns bool
         """
-        a = self.c.SleepTimer / 60
+        
+
+        hour = 0
+        mins = 2
+        sec  = 0
+
+        last = datetime.datetime.now()
+        print(last)
+
+        newHour = last.hour + hour
+        if newHour >= 24:
+            hour = newHour - 24
+            pass
+
+        newMin = last.minute + mins
+        if last.minute + mins >= 60:
+            mins = newMin - mins
+            pass
+
+        newSec = last.second + sec
+        if last.second + sec >= 60:
+            sec = newSec - sec
+            pass
+
+        last = last.replace(hour=newHour, minute=newMin, second=newSec)
+        print(last)
+
+        if now <= last:
+            print("time is diff")
+        print()
+
+        a = self.iconfig.SleepInterval/60
         s = str(a)
         arr = s.split('.')
+        
         if arr.__len__() == 3:
             lastHour = self.LastRefresh.hour + int(arr[0])
             lastMin = self.LastRefresh.minute + int(arr[1]) 

@@ -4,14 +4,14 @@ import yaml
 import json
 
 from networkmonitor.src.configuration import IConfig
-from networkmonitor.src.collections import Nodes
+from networkmonitor.src.collections import Nodes, SleepInterval
 from networkmonitor.src.exceptions import FailedToLoadConfigurationFile, FailedToGenerateNewFile
 
 class YamlConfig(IConfig):
     def __init__(self, config: IConfig):
-        self.config:IConfig     = config
-        #self.SleepTimer:int     = -1
-        #self.Nodes              = []
+        self.config:IConfig                 = config
+        self.sleepInterval:SleepInterval    = SleepInterval()
+        self.nodes                          = []
         pass
 
     def NewConfig(self, defaultConfig):
@@ -36,8 +36,8 @@ class YamlConfig(IConfig):
             try:
                 with open(self.config.PathConfig) as yamlFile:
                     raw = yaml.safe_load(yamlFile)
-                    self.config.SleepInterval = raw['SleepInterval']
-                    #self.SleepTimer = raw['SleepInterval']
+
+                    self.__ParseSleepInterval(raw['SleepInterval'])
                     self.__ParseNodes(raw)
             except FailedToLoadConfigurationFile:
                 print(f'Configuration file was found at {p}.  Ran into a problem loading the file into memory.  Was the file locked?  Is the file format wrong?')
@@ -45,6 +45,11 @@ class YamlConfig(IConfig):
             pass
 
         pass
+
+    def __ParseSleepInterval(self, json:str):
+        self.sleepInterval.hours    = json['Hours']
+        self.sleepInterval.minutes  = json['Minutes']
+        self.sleepInterval.seconds  = json['Seconds']
 
     def __ParseNodes(self, raw:str):
         for d in raw['Nodes']:
@@ -69,5 +74,5 @@ class YamlConfig(IConfig):
                 node.category = ''
 
             #self.Nodes.append(node)
-            self.config.Nodes.append(node)
+            self.nodes.append(node)
         pass

@@ -13,6 +13,19 @@ class ContextProtocols:
         pass
 
     def Start(self):
+        self.protocols.Start()
+        self.Status = self.protocols.Status
+        self.MS = int(self.protocols.MS)
+        pass   
+    
+    def GetWorkingClass(self, replaceInterface:bool = False):
+        """
+        This is used to generate a working class based off the config type.
+        If we know the type and have a class we can use, make a new instance and return it.
+        Currently returns YamlConfig or JsonConfig.
+
+        @param:replaceInterface = If True it will take the generated class and place it in self.config.  If False, return value.
+        """
         if self.protocols.Type.lower() == "icmp":
             p = Ping(self.protocols)
         elif self.protocols.Type.lower() == "http:get":
@@ -21,8 +34,8 @@ class ContextProtocols:
             p = Http(self.protocols)
         else:
             raise InvalidProtocol(f"Requested protocol is not supported: {self.protocols.Type}")
-            
-        p.Start()
-        self.Status = p.Status
-        self.MS = int(p.MS)
-        pass    
+
+        if replaceInterface == True:
+            self.protocols = p
+        else: 
+            return p
