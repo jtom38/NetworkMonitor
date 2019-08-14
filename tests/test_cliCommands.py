@@ -21,6 +21,5 @@ def test_NewYamlConfig():
 
     os.remove('delete.yaml')
 
-    if cc.SleepInterval == 120:
+    if cc.configuration.sleepInterval.minutes == 2:
         assert True
-    pass

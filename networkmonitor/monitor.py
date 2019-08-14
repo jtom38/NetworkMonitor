@@ -5,7 +5,8 @@ from networkmonitor.src.configuration import *
 from networkmonitor.src.protocols import *
 from networkmonitor.src import Nodes
 from networkmonitor.src import InvalidProtocol, InvalidNodeConfiguration
-from networkmonitor.src import CleanTime
+#from networkmonitor.src import CleanTime
+from networkmonitor.src import RefreshTimer
 
 class Monitor():
     """
@@ -19,6 +20,8 @@ class Monitor():
         self.CfgContext.GetWorkingConfigClass(True)
         self.CfgContext.ReadConfig()
 
+        self.refresh = RefreshTimer(config)
+
         self.report = []       
         self.LastRefresh = datetime.datetime.now()
         self.NextRefresh = datetime.datetime.now()
@@ -26,7 +29,9 @@ class Monitor():
 
     def Start(self, force:bool=False):
         if force == False:
-            res = self.__CheckRefreshTimer()
+            res = self.refresh.CheckRefreshTimer()
+
+            #res = self.__CheckRefreshTimer()
             if res == True:
                 self.__Worker()
         else:
@@ -71,70 +76,3 @@ class Monitor():
             self.report = report
 
 
-    def __CheckRefreshTimer(self):
-        """
-        Gets the time of the last update and adds the SleepTimer value and checks if it needs to run again.
-        Returns bool
-        """
-        now = self.LastRefresh
-        newHour = now.hour + self.CfgContext.configuration.sleepInterval.hours
-        if newHour >= 24:
-            newHour = newHour - 24
-            pass
-
-        newMin = now.minute + self.CfgContext.configuration.sleepInterval.minutes
-        if newMin >= 60:
-            newMin = newMin - 60
-            pass
-
-        newSec = now.second + self.CfgContext.configuration.sleepInterval.seconds
-        if newSec >= 60:
-            newSec = newSec - 60
-            pass
-
-        now = now.replace(hour=newHour, minute=newMin, second=00)
-
-        if self.LastRefresh >= now:
-            # Refresh
-            self.SetNextRefresh()
-            self.LastRefresh = now
-            return True
-
-    def SetNextRefresh(self):
-        n = self.LastRefresh
-
-        newSec = n.second + self.CfgContext.configuration.sleepInterval.seconds
-        if newSec >= 60:
-            newSec = newSec - 60
-            pass
-
-        newMin = n.minute + self.CfgContext.configuration.sleepInterval.minutes
-        if newMin >= 60:
-            newMin = newMin - 60
-            pass
-
-        newHour = n.hour + self.CfgContext.configuration.sleepInterval.hours
-        if newHour >= 24:
-            newHour = newHour - 24
-            pass
-
-        n = n.replace(hour=newHour, minute=newMin, second=00)
-
-    def GetNextRefresh(self):
-        now = datetime.datetime.now()
-        newHour = now.hour + self.CfgContext.configuration.sleepInterval.hours
-        if newHour >= 24:
-            newHour = newHour - 24
-            pass
-
-        newMin = now.minute + self.CfgContext.configuration.sleepInterval.minutes
-        if newMin >= 60:
-            newMin = newMin - 60
-            pass
-
-        newSec = now.second + self.CfgContext.configuration.sleepInterval.seconds
-        if newSec >= 60:
-            newSec = newSec - 60
-            pass
-
-        return f"{now.hour}:{now.minute}"

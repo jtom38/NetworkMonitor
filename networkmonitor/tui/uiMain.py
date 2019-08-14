@@ -7,7 +7,7 @@ import typing
 from datetime import datetime
 
 from networkmonitor import CursesHelper, Monitor
-from networkmonitor.src import LogsCol, CleanTime
+from networkmonitor.src import LogsCol, RefreshTimer
 from networkmonitor.tui import uiLogs, uiHelp
 from networkmonitor.src.configuration import *
 
@@ -20,7 +20,8 @@ class uiMain():
         self.config.GetWorkingConfigClass(True)
         self.config.ReadConfig()
 
-        self.monitor = Monitor(config=config)
+        #self.refresh = RefreshTimer(config)
+        self.monitor = Monitor(config=self.iconfig)
 
         self.columnCount = 4
         pass
@@ -137,7 +138,7 @@ class uiMain():
         return ch
 
     def __InsertTitle(self, stdscr):
-        res = self.monitor.GetNextRefresh()
+        res = self.monitor.refresh.GetNextRefresh()
         
         #res = CleanTime().GetNextNodeRefreshTime(self.monitor.iconfig.SleepInterval, self.monitor.LastRefresh)
         title           = f"|NetworkMonitor |Refresh@{res} | "

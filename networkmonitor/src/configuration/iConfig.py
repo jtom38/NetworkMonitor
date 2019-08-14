@@ -10,8 +10,8 @@ class IConfig:
         self.PathConfig:str = PathConfig
         self.NewConfig:bool = NewConfig
 
-        self.SleepTimer:int = -1
-        self.Nodes          = []
+        self.nleepTimer:int = -1
+        self.nodes          = []
         pass
 
     def ReadConfig(self):

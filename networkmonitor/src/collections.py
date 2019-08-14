@@ -23,8 +23,9 @@ class LogsCol():
 class Configuration():
     def __init__(self):
         self.sleepInterval: SleepInterval   = SleepInterval()
-        self.nodes:Nodes                    = []
+        self.nodes                          = []
         pass
+
 
 class SleepInterval():
     def __init__(self):

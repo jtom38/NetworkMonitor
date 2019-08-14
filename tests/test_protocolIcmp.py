@@ -22,6 +22,7 @@ def test_ProtocolInterfaceAddress():
 def test_ProtocolStatus():
     i = IProtocols("localhost", "ICMP")
     cp = ContextProtocols(i)
+    cp.GetWorkingClass(True)
     cp.Start()
 
     if cp.Status == "Online":
@@ -32,6 +33,7 @@ def test_ProtocolStatus():
 def test_ProtocolMS():
     i = IProtocols("localhost", "ICMP")
     cp = ContextProtocols(i)
+    cp.GetWorkingClass(True)
     cp.Start()
 
     if cp.MS >= 0:

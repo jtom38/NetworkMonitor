@@ -23,6 +23,7 @@ def test_ProtocolInterfaceAddress():
 def test_ProtocolBadURL():
     i = IProtocols("www.google.com", "HTTP:GET")
     cp = ContextProtocols(i)
+    cp.GetWorkingClass(True)
     cp.Start()
 
     if cp.Status == "Online":
@@ -34,9 +35,10 @@ def test_ProtocolHttpURL():
     """
     This will test to confirm tht we can accept a normal URI.
     """
-    sleep(5)
+    #sleep(5)
     i = IProtocols("https://www.gmail.com", "HTTP:GET")
     cp = ContextProtocols(i)
+    cp.GetWorkingClass(True)
     cp.Start()
 
     if cp.Status == "Online":
@@ -45,9 +47,10 @@ def test_ProtocolHttpURL():
     pass
 
 def test_ProtocolHttpsURL():
-    sleep(5)
+    #sleep(5)
     i = IProtocols("https://www.espn.com", "HTTP:GET")
     cp = ContextProtocols(i)
+    cp.GetWorkingClass(True)
     cp.Start()
 
     if cp.Status == "Online":
@@ -59,6 +62,7 @@ def test_ProtocolHttpsURL():
 def test_ProtocolMS():
     i = IProtocols("https://www.youtube.com", "HTTP:Get")
     cp = ContextProtocols(i)
+    cp.GetWorkingClass(True)
     cp.Start()
 
     if cp.MS >= 0:

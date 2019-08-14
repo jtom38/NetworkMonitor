@@ -65,6 +65,7 @@ class ContextConfig:
             return c
 
     def ReadConfig(self):
+        self.configuration.nodes.clear()
         self.config.ReadConfig()
         self.configuration.nodes = self.config.nodes
         self.configuration.sleepInterval = self.config.sleepInterval

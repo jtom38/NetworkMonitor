@@ -1,78 +1,77 @@
 
-import datetime
+from datetime import datetime, timedelta
+from networkmonitor.src.configuration import *
 
 class RefreshTimer():
-    def __init__(self):
-        
+    def __init__(self, iconfig:IConfig):
+        self.iconfig = iconfig
+        self.config = ContextConfig(iconfig)
+        self.config.GetWorkingConfigClass(True)
+        self.config.ReadConfig()
+
+        self.LastRefresh:datetime = datetime.now()
+        self.NextRefresh:datetime = self.LastRefresh
         pass
 
-    def __CheckRefreshTimer(self):
+    def CheckRefreshTimer(self):
         """
         Gets the time of the last update and adds the SleepTimer value and checks if it needs to run again.
         Returns bool
         """
-        now = self.LastRefresh
-        newHour = now.hour + self.CfgContext.configuration.sleepInterval.hours
-        if newHour >= 24:
-            newHour = newHour - 24
-            pass
-
-        newMin = now.minute + self.CfgContext.configuration.sleepInterval.minutes
-        if newMin >= 60:
-            newMin = newMin - 60
-            pass
-
-        newSec = now.second + self.CfgContext.configuration.sleepInterval.seconds
-        if newSec >= 60:
-            newSec = newSec - 60
-            pass
-
-        now = now.replace(hour=newHour, minute=newMin, second=00)
-
-        if self.LastRefresh >= now:
+        #now = self.LastRefresh
+        now = datetime.now()
+        if now >= self.NextRefresh:
             # Refresh
             self.SetNextRefresh()
             self.LastRefresh = now
             return True
+        else:
+            return False
 
     def SetNextRefresh(self):
         n = self.LastRefresh
+        si = self.config.configuration.sleepInterval
+        td = timedelta(hours=si.hours, minutes=si.minutes, seconds=si.seconds)
 
-        newSec = n.second + self.CfgContext.configuration.sleepInterval.seconds
-        if newSec >= 60:
-            newSec = newSec - 60
-            pass
+        n = n + td
 
-        newMin = n.minute + self.CfgContext.configuration.sleepInterval.minutes
-        if newMin >= 60:
-            newMin = newMin - 60
-            pass
-
-        newHour = n.hour + self.CfgContext.configuration.sleepInterval.hours
-        if newHour >= 24:
-            newHour = newHour - 24
-            pass
-
-        n = n.replace(hour=newHour, minute=newMin, second=00)
+        self.NextRefresh = n
 
     def GetNextRefresh(self):
-        now = datetime.datetime.now()
-        newHour = now.hour + self.CfgContext.configuration.sleepInterval.hours
-        if newHour >= 24:
-            newHour = newHour - 24
-            pass
+        res:str = f"{self.NextRefresh.hour}:{self.NextRefresh.minute}"
+        return res
 
-        newMin = now.minute + self.CfgContext.configuration.sleepInterval.minutes
-        if newMin >= 60:
-            newMin = newMin - 60
-            pass
+    def GetHour(self, now:datetime, diff:int):
+        n = now.hour + diff
+        if n >= 24:
+            # Get the remainder
+            r = n - 24
 
-        newSec = now.second + self.CfgContext.configuration.sleepInterval.seconds
-        if newSec >= 60:
-            newSec = newSec - 60
-            pass
+            # Adjust the new time value
+            n = 0 + r
+            return [n, r] 
 
-        return f"{now.hour}:{now.minute}"
+        return [n]
+   
+    def GetMin(self, now:datetime, diff:int):
+        n = now.minute + diff
+        if n == 60:
+            r = 1
+            n = 0
+            return [n,r]
+        elif n >= 61:
+            r = n - 60
+            n = r
+            return [n,r]
+        
+        return [n]
 
+    def GetSec(self, now:datetime, diff:int):
+        n = now.second + diff
+        if n >= 60:            
+            r = n - 60
+            n = 0 + r
+            return [n,r]
+        return [n]
 
     
