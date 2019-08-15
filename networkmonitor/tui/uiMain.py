@@ -4,7 +4,7 @@ import threading
 import datetime
 import time
 import typing
-from datetime import datetime
+#from datetime import datetime
 
 from networkmonitor import CursesHelper, Monitor
 from networkmonitor.src import LogsCol, RefreshTimer

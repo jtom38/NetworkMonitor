@@ -1,16 +1,17 @@
 
 import curses
+import typing
 from networkmonitor import CursesHelper
 from networkmonitor.src import LogsCol
 
 class uiLogs():
-    logs = []
+    logs:List[LogsCol] = []
 
     def __init__(self):
         #self.logs = []
         pass
 
-    def Start(self):
+    def Start(self) -> None:
         ch = CursesHelper()
         ch.WindowNew()
         #curses.wrapper(self.__RenderWindow)

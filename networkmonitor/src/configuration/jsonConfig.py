@@ -15,29 +15,29 @@ class JsonConfig(IConfig):
         pass
 
     def NewConfig(self, defaultConfig):
-        if os.path.exists(self.config.PathConfig) == True:
-            raise FailedToGenerateNewFile(f"Attempted to generate a new file at {self.config.PathConfig} because a file was already present.  Pick a different file name or remove the existing file.")
+        if os.path.exists(self.config.argPathConfig) == True:
+            raise FailedToGenerateNewFile(f"Attempted to generate a new file at {self.config.argPathConfig} because a file was already present.  Pick a different file name or remove the existing file.")
 
         with open('example.json', mode='r') as default:
             j = json.load(default)
 
-        with open(self.config.PathConfig, mode='w') as jsonFile:
+        with open(self.config.argPathConfig, mode='w') as jsonFile:
             json.dump(j, jsonFile)
         
         pass
 
     def ReadConfig(self):
-        p = os.path.abspath(self.config.PathConfig)
+        p = os.path.abspath(self.config.argPathConfig)
         if os.path.exists(p) == True:
             # found the file
             self.__JsonUpdateConfig()
         else:
-            print(f"{self.config.PathConfig} was not found.  Exiting...")
+            print(f"{self.config.argPathConfig} was not found.  Exiting...")
             exit()
 
-    def __JsonUpdateConfig(self):
+    def __JsonUpdateConfig(self)->None:
         try:
-            with open(self.config.PathConfig) as jsonFile:
+            with open(self.config.argPathConfig) as jsonFile:
                 res = json.load(jsonFile)
                 
                 #self.config.SleepInterval. = res['SleepInterval']
@@ -45,14 +45,14 @@ class JsonConfig(IConfig):
                 self.__JsonParseNodes(res)
                 #self.Nodes = res['Nodes'] 
         except Exception:
-            print(f'Failed to load {self.config.PathConfig}')
+            print(f'Failed to load {self.config.argPathConfig}')
 
-    def __ParseSleepInterval(self, json:str):
-        self.sleepInterval.hours    = json['Hours']
-        self.sleepInterval.minutes  = json['Minutes']
-        self.sleepInterval.seconds  = json['Seconds']
+    def __ParseSleepInterval(self, json:str)->None:
+        self.sleepInterval.hours    = int(json['Hours'])
+        self.sleepInterval.minutes  = int(json['Minutes'])
+        self.sleepInterval.seconds  = int(json['Seconds'])
 
-    def __JsonParseNodes(self, json:str):
+    def __JsonParseNodes(self, json:str)->None:
         for d in json['Nodes']:
             try:
                 node = Nodes(d['Name'], d['Address'], d['Protocol'])

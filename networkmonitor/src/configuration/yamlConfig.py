@@ -18,23 +18,23 @@ class YamlConfig(IConfig):
         """
         Generates a new configuration file based off values given to the class
         """
-        if os.path.exists(self.config.PathConfig) == True:
+        if os.path.exists(self.config.argPathConfig) == True:
             raise FailedToGenerateNewFile(f"Attempted to generate a new file at {self.config.PathConfig} because a file was already present.  Pick a different file name or remove the existing file.")
 
         with open("example.yaml", mode='r') as default:
             y = yaml.safe_load(default)
 
-        with open(self.config.PathConfig, mode='w') as yamlFile:
+        with open(self.config.argPathConfig, mode='w') as yamlFile:
             yaml.dump(y, yamlFile, default_flow_style=False)
             
         
         pass
 
     def ReadConfig(self):
-        p = os.path.abspath(self.config.PathConfig)
+        p = os.path.abspath(self.config.argPathConfig)
         if os.path.exists(p) == True:
             try:
-                with open(self.config.PathConfig) as yamlFile:
+                with open(self.config.argPathConfig) as yamlFile:
                     raw = yaml.safe_load(yamlFile)
 
                     self.__ParseSleepInterval(raw['SleepInterval'])

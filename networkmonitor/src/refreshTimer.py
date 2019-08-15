@@ -13,7 +13,7 @@ class RefreshTimer():
         self.NextRefresh:datetime = self.LastRefresh
         pass
 
-    def CheckRefreshTimer(self):
+    def CheckRefreshTimer(self)->bool:
         """
         Gets the time of the last update and adds the SleepTimer value and checks if it needs to run again.
         Returns bool
@@ -28,7 +28,7 @@ class RefreshTimer():
         else:
             return False
 
-    def SetNextRefresh(self):
+    def SetNextRefresh(self)->None:
         n = self.LastRefresh
         si = self.config.configuration.sleepInterval
         td = timedelta(hours=si.hours, minutes=si.minutes, seconds=si.seconds)
@@ -37,7 +37,7 @@ class RefreshTimer():
 
         self.NextRefresh = n
 
-    def GetNextRefresh(self):
+    def GetNextRefresh(self)->str:
         res:str = f"{self.NextRefresh.hour}:{self.NextRefresh.minute}"
         return res
 

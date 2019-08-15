@@ -1,5 +1,6 @@
 
 import datetime
+import typing
 from networkmonitor import OldConfig
 from networkmonitor.src.configuration import *
 from networkmonitor.src.protocols import *
@@ -27,7 +28,7 @@ class Monitor():
         self.NextRefresh = datetime.datetime.now()
         pass
 
-    def Start(self, force:bool=False):
+    def Start(self, force:bool=False) -> None:
         if force == False:
             res = self.refresh.CheckRefreshTimer()
 
@@ -37,7 +38,7 @@ class Monitor():
         else:
             self.__Worker()
         
-    def __Worker(self):
+    def __Worker(self)->None:
         self.CfgContext.ReadConfig()
         report = self.CfgContext.configuration.nodes
         requirement:bool = True

@@ -23,9 +23,9 @@ class ContextConfig:
 
         # Did we get our IConfig on its own?
         try:
-            if self.config.PathConfig.endswith('yaml'):
+            if self.config.argPathConfig.endswith('yaml'):
                 return 'yaml'
-            elif self.config.PathConfig.endswith('json'):
+            elif self.config.argPathConfig.endswith('json'):
                 return 'json'
             else:
                 return None
@@ -54,15 +54,19 @@ class ContextConfig:
         """
         if self.type == "yaml":
             c = YamlConfig(self.config)
+            return self.__ReplaceWorkingConfig(replaceConfig, c)
         elif self.type == "json":
-            c = JsonConfig(self.config)
+            j = JsonConfig(self.config)
+            return self.__ReplaceWorkingConfig(replaceConfig, j)
+
         else:
             pass
         
+    def __ReplaceWorkingConfig(self, replaceConfig:bool, passedClass):
         if replaceConfig == True:
-            self.config = c
+            self.config = passedClass
         else:
-            return c
+            return passedClass
 
     def ReadConfig(self):
         self.configuration.nodes.clear()

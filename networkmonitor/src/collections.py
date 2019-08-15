@@ -1,4 +1,6 @@
 
+import typing
+
 """
 This contains the collections that can be used within the application
 """
@@ -11,27 +13,27 @@ class LogsCol():
     def __init__(self, level:str ='',message:str = '', name:str = '', 
                 address:str = '', protocol:str='' ):
         import datetime
-        self.level      = level
-        self.message    = message
-        self.name       = name
-        self.address    = address
-        self.protocol   = protocol
-        self.time       = datetime.datetime.now()
+        self.level:str              = level
+        self.message:str            = message
+        self.name:str               = name
+        self.address:str            = address
+        self.protocol:str           = protocol
+        self.time:datetime.datetime = datetime.datetime.now()
         pass    
     pass
 
 class Configuration():
     def __init__(self):
-        self.sleepInterval: SleepInterval   = SleepInterval()
-        self.nodes                          = []
+        self.sleepInterval:SleepInterval   = SleepInterval()
+        self.nodes:List[Nodes]             = []
         pass
 
 
 class SleepInterval():
     def __init__(self):
-        self.hours      = 0
-        self.minutes    = 0
-        self.seconds    = 0
+        self.hours:int      = 0
+        self.minutes:int    = 0
+        self.seconds:int    = 0
         pass
 
 class Nodes():

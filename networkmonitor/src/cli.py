@@ -16,11 +16,11 @@ class CLI:
         This will handle the generation of new config files on request.
         """
 
-        if self.config.NewConfig == True:        
+        if self.config.argNewConfig == True:        
             # Check if the requested --config is valid
-            if self.config.PathConfig.endswith('.yaml'):
+            if self.config.argPathConfig.endswith('.yaml'):
                 y = YamlConfig(self.config)
-            elif self.config.PathConfig.endswith('.json'):
+            elif self.config.argPathConfig.endswith('.json'):
                 y = JsonConfig(self.config)
             else:
                 pass 

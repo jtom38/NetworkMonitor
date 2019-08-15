@@ -1,4 +1,9 @@
 
+from typing import List
+
+from networkmonitor.src.collections import Nodes, Configuration
+
+
 class IConfig:
     """
     IConfig is a interface to be used with the configuration loader.
@@ -6,12 +11,13 @@ class IConfig:
     Once this is filled in call ConfigContext and pass this in
     """
 
-    def __init__(self, PathConfig:str, NewConfig = False):
-        self.PathConfig:str = PathConfig
-        self.NewConfig:bool = NewConfig
+    def __init__(self, argPathConfig:str, argNewConfig:bool = False):
+        self.argPathConfig:str      = argPathConfig
+        self.argNewConfig:bool      = argNewConfig
 
-        self.nleepTimer:int = -1
-        self.nodes          = []
+        #self.configuration:Configuration
+        self.sleepTimer:int     = -1
+        self.nodes:List[Nodes]  = []
         pass
 
     def ReadConfig(self):
@@ -24,8 +30,4 @@ class IConfig:
         """
         When requested we will generated a new configuration file 
         """
-        pass
-
-    def cookie(self):
-        pass
-        
+        pass 
