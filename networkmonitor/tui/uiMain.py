@@ -62,7 +62,7 @@ class uiMain():
 
         # Refresh the screen with new data every 5 seconds
         
-        dtRefresh = datetime.now()
+        #dtRefresh = datetime.now()
 
         # Checking to see if the last key that was entered was 'F12'
         while (ch.key != curses.KEY_F12):

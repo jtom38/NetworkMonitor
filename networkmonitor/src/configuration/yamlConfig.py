@@ -4,14 +4,16 @@ import yaml
 import json
 
 from networkmonitor.src.configuration import IConfig
-from networkmonitor.src.collections import Nodes, SleepInterval
+from networkmonitor.src.collections import Nodes, SleepInterval, CfgProtocols, Configuration
 from networkmonitor.src.exceptions import FailedToLoadConfigurationFile, FailedToGenerateNewFile
 
 class YamlConfig(IConfig):
     def __init__(self, config: IConfig):
         self.config:IConfig                 = config
-        self.sleepInterval:SleepInterval    = SleepInterval()
-        self.nodes                          = []
+        self.configuration:Configuration    = Configuration()
+        #self.sleepInterval:SleepInterval    = SleepInterval()
+        #self.protocols:CfgProtocols         = CfgProtocols()
+        #self.nodes                          = []
         pass
 
     def NewConfig(self, defaultConfig):
@@ -38,6 +40,7 @@ class YamlConfig(IConfig):
                     raw = yaml.safe_load(yamlFile)
 
                     self.__ParseSleepInterval(raw['SleepInterval'])
+                    self.__ParseProtocols(raw['Protocols'])
                     self.__ParseNodes(raw)
             except FailedToLoadConfigurationFile:
                 print(f'Configuration file was found at {p}.  Ran into a problem loading the file into memory.  Was the file locked?  Is the file format wrong?')
@@ -47,9 +50,16 @@ class YamlConfig(IConfig):
         pass
 
     def __ParseSleepInterval(self, json:str):
-        self.sleepInterval.hours    = json['Hours']
-        self.sleepInterval.minutes  = json['Minutes']
-        self.sleepInterval.seconds  = json['Seconds']
+        #self.sleepInterval.hours    = json['Hours']
+        #self.sleepInterval.minutes  = json['Minutes']
+        #self.sleepInterval.seconds  = json['Seconds']
+
+        self.configuration.sleepInterval.hours = json['Hours']
+        self.configuration.sleepInterval.minutes = json["Minutes"]
+        self.configuration.sleepInterval.seconds = json["Seconds"]
+
+    def __ParseProtocols(self, json:str):
+        self.configuration.protocols.icmp.timeout   = json['ICMP']['Timeout']
 
     def __ParseNodes(self, raw:str):
         for d in raw['Nodes']:
@@ -74,5 +84,6 @@ class YamlConfig(IConfig):
                 node.category = ''
 
             #self.Nodes.append(node)
-            self.nodes.append(node)
+            #self.nodes.append(node)
+            self.configuration.nodes.append(node)
         pass

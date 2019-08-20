@@ -7,6 +7,11 @@ SleepInterval:
   Minutes: 2
   Seconds: 0
 
+Protocols:
+  ICMP:
+    # This defines the max amount of time we will wait before we exit the command  
+    Timeout: 1
+
 # Checking to make sure we have a connection to the outside world
 # You will want to place the nodes in the order that you want them tested
 Nodes:

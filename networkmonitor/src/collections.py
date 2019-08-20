@@ -24,17 +24,30 @@ class LogsCol():
 
 class Configuration():
     def __init__(self):
-        self.sleepInterval:SleepInterval   = SleepInterval()
-        self.nodes:List[Nodes]             = []
+        self.sleepInterval:SleepInterval    = SleepInterval()
+        self.protocols:CfgProtocols         = CfgProtocols() 
+        self.nodes                          = []
+
         pass
 
 
 class SleepInterval():
+    r"""
+    This is used as part of Configuration to define the sleep timeout configuration
+    """
     def __init__(self):
         self.hours:int      = 0
         self.minutes:int    = 0
         self.seconds:int    = 0
         pass
+
+class CfgProtocols():
+    def __init__(self):
+        self.icmp:CfgIcmp   = CfgIcmp()
+
+class CfgIcmp():
+    def __init__(self):
+        self.timeout:int    = 0
 
 class Nodes():
     """

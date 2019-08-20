@@ -3,10 +3,12 @@ import typing
 import subprocess
 
 from networkmonitor.src.protocols import IProtocols
+from networkmonitor.src import Configuration
 
 class Ping:
     def __init__(self, protocol:IProtocols):
         self.Protocol:IProtocols    = protocol
+        self.configuration:Configuration = Configuration()
 
         self.Status:str             = ''
         self.MS:int                 = -1
@@ -44,6 +46,8 @@ class Ping:
         else:
             param = '-c'
         pass
+
+        if 
 
         return ['ping', param, '1', URI]
  

@@ -4,6 +4,11 @@
         "Minutes": 2,
         "Seconds": 0
     },
+    "Protocols":{
+        "ICMP":{
+            "Timeout": 1
+        }
+    },
     "Nodes": [
         {
             "Name":     "LocalHost",
@@ -18,34 +23,20 @@
             "Protocol":"icmp",
             "Required":true,
             "Category": "Local"
-        },   
-        {
-            "Name":"Google",
-            "Address":"http://www.google.com",
-            "Protocol":"http:get",
-            "Required":false,
-            "Category":"External"
         },
         {
             "Name":"Google",
-            "Address":"www.google.com",
+            "Address":"google.com",
             "Protocol":"icmp",
             "Required":false,
             "Category":"External"
-        },
+        },   
         {
-            "Name":"Reddit",
-            "Address":"http://www.reddit.com",
-            "Protocol":"HTTP:Get",
+            "Name":"Google",
+            "Address":"google.com",
+            "Protocol":"http:get",
             "Required":false,
             "Category":"External"
-        },
-	    {
-	        "Name": "Youtube",
-	        "Address":"http://www.youtube.com",
-	        "Protocol":"HTTP:Get",
-            "Required":false,
-            "Category":"External"
-	    }
+        }
     ]
 }

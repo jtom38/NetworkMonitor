@@ -69,10 +69,11 @@ class ContextConfig:
             return passedClass
 
     def ReadConfig(self):
-        self.configuration.nodes.clear()
+        self.configuration.nodes = []
         self.config.ReadConfig()
-        self.configuration.nodes = self.config.nodes
-        self.configuration.sleepInterval = self.config.sleepInterval
+        self.configuration = self.config.configuration
+        #self.configuration.nodes = self.config.nodes
+        #self.configuration.sleepInterval = self.config.sleepInterval
         #self.Nodes          = self.config.config.Nodes
         #self.SleepInterval  = self.config.config.SleepInterval
         pass
@@ -86,6 +87,11 @@ class ContextConfig:
                 "Hours": 0,
                 "Minutes": 2,
                 "Seconds": 0
+            },
+            "Protocols":{
+                "ICMP":{
+                    "Timeout":0
+                }
             },
             'Nodes': [
                 {

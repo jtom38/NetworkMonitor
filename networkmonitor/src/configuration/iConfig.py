@@ -16,8 +16,8 @@ class IConfig:
         self.argNewConfig:bool      = argNewConfig
 
         #self.configuration:Configuration
-        self.sleepTimer:int     = -1
-        self.nodes:List[Nodes]  = []
+        #self.sleepTimer:int     = -1
+        #self.nodes:List[Nodes]  = []
         pass
 
     def ReadConfig(self):

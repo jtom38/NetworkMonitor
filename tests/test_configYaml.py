@@ -66,6 +66,15 @@ def test_YamlNodesContainProtocol():
     
     assert True
 
+def test_LoadConfigTwice():
+    c = ContextConfig(IConfig('example.yaml'))
+    c.GetWorkingConfigClass(True)
+    c.ReadConfig()
+    c.ReadConfig()
+
+    if c.configuration.nodes.__len__() == 4:
+        assert True
+
 
 def test_GenerateNewYaml():
     f = 'delete.yaml'
@@ -96,3 +105,27 @@ def test_FindValidClassToInject():
         assert True
     
     pass
+
+def test_ProtocolsIcmpTimeout():
+    c = ContextConfig(IConfig("example.yaml"))
+    c.GetWorkingConfigClass(True)
+    c.ReadConfig()
+
+    if c.configuration.protocols.icmp.timeout == 0:
+        assert True
+
+def test_ProtocolsIcmpTimeoutNewConfig():
+    f = 'delete.yaml'
+    try:
+        os.remove(f)
+    except:
+        pass
+
+    c = ContextConfig(IConfig(f))
+    c.GetWorkingConfigClass(True)
+    c.NewConfig()
+    c.ReadConfig()
+
+    os.remove(f)
+    if c.configuration.protocols.icmp.timeout == 0:
+        assert True

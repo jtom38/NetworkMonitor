@@ -1,12 +1,16 @@
 
 from networkmonitor.src.protocols import IProtocols, Ping, Http
+from networkmonitor.src.configuration import IConfig
 from networkmonitor.src.exceptions import InvalidProtocol
 
 class ContextProtocols:
 
-    def __init__(self, protocols:IProtocols):
+    def __init__(self, protocols:IProtocols, iconfig:IConfig):
         # All results are places here
         self.protocols:IProtocols   = protocols
+
+        # This is a optional class that is only used so far 
+        self.iconfig:IConfig = iconfig
 
         self.Status:str             = ''
         self.MS:int                 = -1

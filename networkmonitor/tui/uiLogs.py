@@ -5,7 +5,7 @@ from networkmonitor import CursesHelper
 from networkmonitor.src import LogsCol
 
 class uiLogs():
-    logs:List[LogsCol] = []
+    logs = []
 
     def __init__(self):
         #self.logs = []

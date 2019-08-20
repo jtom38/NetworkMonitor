@@ -48,6 +48,7 @@ class Monitor():
                 np = node.protocol.lower()
                 if np == "icmp":
                     cp = ContextProtocols(IProtocols(node.address, "ICMP"))
+                    
                     cp.GetWorkingClass(True)
                     cp.Start()
                 elif np == "http:get":
