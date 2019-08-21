@@ -21,7 +21,7 @@ class uiMain():
         self.config.ReadConfig()
 
         #self.refresh = RefreshTimer(config)
-        self.monitor = Monitor(config=self.iconfig)
+        self.monitor = Monitor(iconfig=self.iconfig)
 
         self.columnCount = 4
         pass

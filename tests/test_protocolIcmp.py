@@ -1,9 +1,16 @@
 
 from networkmonitor.src.protocols import IProtocols, ContextProtocols, Ping
+from networkmonitor.src.configuration import *
 
 def test_ProtocolInterfaceType():
-    i = IProtocols("localhost", "ICMP")
-    cp = ContextProtocols(i)
+    #i = IProtocols("localhost", "ICMP")
+
+    cp = ContextProtocols(
+        IProtocols("localhost", "icmp"),
+        IConfig("example.yaml")
+    )
+
+    #cp = ContextProtocols(i)
 
     if cp.protocols.Type == "ICMP":
         assert True
@@ -11,8 +18,13 @@ def test_ProtocolInterfaceType():
     pass
 
 def test_ProtocolInterfaceAddress():
-    i = IProtocols("localhost", "ICMP")
-    cp = ContextProtocols(i)
+    #i = IProtocols("localhost", "ICMP")
+    #cp = ContextProtocols(i)
+    cp = ContextProtocols(
+        IProtocols("localhost", "icmp"),
+        IConfig("example.yaml")
+    )
+
 
     if cp.protocols.URI == "localhost":
         assert True
@@ -20,8 +32,12 @@ def test_ProtocolInterfaceAddress():
     pass
 
 def test_ProtocolStatus():
-    i = IProtocols("localhost", "ICMP")
-    cp = ContextProtocols(i)
+    #i = IProtocols("localhost", "ICMP")
+    #cp = ContextProtocols(i)
+    cp = ContextProtocols(
+        IProtocols("localhost", "icmp"),
+        IConfig("example.yaml")
+    )
     cp.GetWorkingClass(True)
     cp.Start()
 
@@ -31,8 +47,12 @@ def test_ProtocolStatus():
     pass
 
 def test_ProtocolMS():
-    i = IProtocols("localhost", "ICMP")
-    cp = ContextProtocols(i)
+    #i = IProtocols("localhost", "ICMP")
+    #cp = ContextProtocols(i)
+    cp = ContextProtocols(
+        IProtocols("localhost",'ICMP'),
+        IConfig("example.yaml")
+    )
     cp.GetWorkingClass(True)
     cp.Start()
 
@@ -40,3 +60,4 @@ def test_ProtocolMS():
         assert True
 
     pass
+

@@ -3,16 +3,23 @@ import typing
 import subprocess
 
 from networkmonitor.src.protocols import IProtocols
+from networkmonitor.src.configuration import *
 from networkmonitor.src import Configuration
 
 class Ping:
     def __init__(self, protocol:IProtocols):
         self.Protocol:IProtocols    = protocol
+
+
+        #self.iconfig:IConfig        = iconfig
+        #self.config:ContextConfig   = ContextConfig(self.iconfig)
+        #self.config.GetWorkingConfigClass(True)
+        #self.config.ReadConfig()
+
         self.configuration:Configuration = Configuration()
 
         self.Status:str             = ''
         self.MS:int                 = -1
-        #self.URI:str                = ''
         pass
 
     def Start(self):
@@ -47,7 +54,15 @@ class Ping:
             param = '-c'
         pass
 
-        if 
+        if self.configuration.protocols.icmp.timeout >= 0:
+            timeout = self.configuration.protocols.icmp.timeout
+            if platform.system().lower() == "windows":
+                timeoutParam = '-W'
+            else:
+                timeoutParam = '-W'
+            pass
+
+            return ['ping', param, '1', timeoutParam, str(timeout), URI]
 
         return ['ping', param, '1', URI]
  

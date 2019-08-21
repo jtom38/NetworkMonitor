@@ -14,14 +14,14 @@ class Monitor():
     Monitor is the working class that checks all the requested nodes.
     """
 
-    def __init__(self, config:IConfig):
-        self.iconfig = config
+    def __init__(self, iconfig:IConfig):
+        self.iconfig = iconfig
 
-        self.CfgContext = ContextConfig(config)
-        self.CfgContext.GetWorkingConfigClass(True)
-        self.CfgContext.ReadConfig()
+        self.config = ContextConfig(self.iconfig)
+        self.config.GetWorkingConfigClass(True)
+        self.config.ReadConfig()
 
-        self.refresh = RefreshTimer(config)
+        self.refresh = RefreshTimer(self.iconfig)
 
         self.report = []       
         self.LastRefresh = datetime.datetime.now()
@@ -39,26 +39,26 @@ class Monitor():
             self.__Worker()
         
     def __Worker(self)->None:
-        self.CfgContext.ReadConfig()
-        report = self.CfgContext.configuration.nodes
+        self.config.ReadConfig()
+        report = self.config.configuration.nodes
         requirement:bool = True
 
-        for node in report:
+        for node in self.config.configuration.nodes:
             if requirement == True:
                 np = node.protocol.lower()
                 if np == "icmp":
-                    cp = ContextProtocols(IProtocols(node.address, "ICMP"))
+                    p = IProtocols(node.address, 'ICMP')
+                    p.configuration = self.config.configuration
+                    cp = ContextProtocols(p)
                     
                     cp.GetWorkingClass(True)
                     cp.Start()
                 elif np == "http:get":
-                    i = IProtocols(node.address, "HTTP:Get")
-                    cp = ContextProtocols(i)
+                    cp = ContextProtocols(IProtocols(node.address, "HTTP:GET"))
                     cp.GetWorkingClass(True)
                     cp.Start()
                 elif np == "http:post":
-                    i = IProtocols(node.address, "HTTP:Post")
-                    cp = ContextProtocols(i)
+                    cp = ContextProtocols(IProtocols(node.address, "Http:Post"))
                     cp.GetWorkingClass(True)
                     cp.Start()
                 else:
