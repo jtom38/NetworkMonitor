@@ -4,6 +4,7 @@ import typing
 from networkmonitor import OldConfig
 from networkmonitor.src.configuration import *
 from networkmonitor.src.protocols import *
+from networkmonitor.src import Configuration
 from networkmonitor.src import Nodes
 from networkmonitor.src import InvalidProtocol, InvalidNodeConfiguration
 #from networkmonitor.src import CleanTime
@@ -15,13 +16,16 @@ class Monitor():
     """
 
     def __init__(self, iconfig:IConfig):
-        self.iconfig = iconfig
+        self.__iconfig__:IConfig = iconfig
 
-        self.config = ContextConfig(self.iconfig)
-        self.config.GetWorkingConfigClass(True)
-        self.config.ReadConfig()
+        self.__config__:ContextConfig = ContextConfig(self.__iconfig__)
+        self.__config__.GetWorkingConfigClass(True)
+        self.__config__.ReadConfig()
 
-        self.refresh = RefreshTimer(self.iconfig)
+        self.__configuration__:Configuration = Configuration()
+        self.__configuration__ = self.__config__.configuration
+
+        self.refresh = RefreshTimer(self.__iconfig__)
 
         self.report = []       
         self.LastRefresh = datetime.datetime.now()
@@ -31,27 +35,29 @@ class Monitor():
     def Start(self, force:bool=False) -> None:
         if force == False:
             res = self.refresh.CheckRefreshTimer()
-
             #res = self.__CheckRefreshTimer()
             if res == True:
                 self.__Worker()
         else:
             self.__Worker()
+
+    def __ReadConfig__(self) -> None:
+        self.__config__.ReadConfig()
+        self.__configuration__ = Configuration()
+        self.__configuration__ = self.__config__.configuration
         
     def __Worker(self)->None:
-        self.config.ReadConfig()
-        report = self.config.configuration.nodes
+        self.__ReadConfig__() 
+        report = self.__configuration__.nodes
         requirement:bool = True
 
-        for node in self.config.configuration.nodes:
+        for node in self.__configuration__.nodes:
             if requirement == True:
                 np = node.protocol.lower()
                 if np == "icmp":
-                    p = IProtocols(node.address, 'ICMP')
-                    p.configuration = self.config.configuration
-                    cp = ContextProtocols(p)
-                    
+                    cp = ContextProtocols(IProtocols(node.address, 'ICMP'))
                     cp.GetWorkingClass(True)
+                    cp.configuration = self.__configuration__
                     cp.Start()
                 elif np == "http:get":
                     cp = ContextProtocols(IProtocols(node.address, "HTTP:GET"))

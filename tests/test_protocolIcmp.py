@@ -3,14 +3,10 @@ from networkmonitor.src.protocols import IProtocols, ContextProtocols, Ping
 from networkmonitor.src.configuration import *
 
 def test_ProtocolInterfaceType():
-    #i = IProtocols("localhost", "ICMP")
-
-    cp = ContextProtocols(
-        IProtocols("localhost", "icmp"),
-        IConfig("example.yaml")
-    )
-
-    #cp = ContextProtocols(i)
+    cp = ContextProtocols(IProtocols("localhost", "icmp"))
+    cc = ContextConfig(IConfig("example.yaml"))
+    cc.GetWorkingConfigClass(True)
+    cp.configuration = cc.configuration
 
     if cp.protocols.Type == "ICMP":
         assert True
@@ -18,13 +14,9 @@ def test_ProtocolInterfaceType():
     pass
 
 def test_ProtocolInterfaceAddress():
-    #i = IProtocols("localhost", "ICMP")
-    #cp = ContextProtocols(i)
-    cp = ContextProtocols(
-        IProtocols("localhost", "icmp"),
-        IConfig("example.yaml")
-    )
-
+    cp = ContextProtocols(IProtocols("localhost", "icmp"))
+    cc = ContextConfig(IConfig("example.yaml"))
+    cc.GetWorkingConfigClass(True)
 
     if cp.protocols.URI == "localhost":
         assert True
@@ -34,10 +26,11 @@ def test_ProtocolInterfaceAddress():
 def test_ProtocolStatus():
     #i = IProtocols("localhost", "ICMP")
     #cp = ContextProtocols(i)
-    cp = ContextProtocols(
-        IProtocols("localhost", "icmp"),
-        IConfig("example.yaml")
-    )
+    cc = ContextConfig(IConfig("example.yaml"))
+    cc.GetWorkingConfigClass(True)
+    cc.ReadConfig()
+
+    cp = ContextProtocols(IProtocols("localhost", "icmp"))
     cp.GetWorkingClass(True)
     cp.Start()
 
@@ -47,12 +40,11 @@ def test_ProtocolStatus():
     pass
 
 def test_ProtocolMS():
-    #i = IProtocols("localhost", "ICMP")
-    #cp = ContextProtocols(i)
-    cp = ContextProtocols(
-        IProtocols("localhost",'ICMP'),
-        IConfig("example.yaml")
-    )
+    cc = ContextConfig(IConfig("example.yaml"))
+    cc.GetWorkingConfigClass(True)
+    cc.ReadConfig()
+
+    cp = ContextProtocols(IProtocols("localhost",'ICMP'))
     cp.GetWorkingClass(True)
     cp.Start()
 
@@ -61,3 +53,15 @@ def test_ProtocolMS():
 
     pass
 
+def test_PassConfigToContext():
+    cc = ContextConfig(IConfig("example.yaml"))
+    cc.GetWorkingConfigClass(True)
+    cc.ReadConfig()
+
+    cp = ContextProtocols(IProtocols("localhost", 'ICMP'))
+    cp.GetWorkingClass(True)
+    cp.configuration = cc.configuration
+    cp.Start()
+
+    if cp.protocols.configuration.nodes.__len__() >= 1:
+        assert True

@@ -5,7 +5,6 @@ import click
 
 from networkmonitor.src.configuration import IConfig, JsonConfig, YamlConfig, ContextConfig 
 from networkmonitor.src import CLI
-
 from networkmonitor.tui import uiMain
 
 #@click.command()
