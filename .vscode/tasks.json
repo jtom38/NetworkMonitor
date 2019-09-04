@@ -1,0 +1,29 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Enable pipenv shell",
+            "type": "shell",
+            "command": "pipenv",
+            "args": [
+                "shell"
+            ]
+        },
+        {
+            "label": "mypy project",
+            "type": "shell",
+            "command": "mypy",
+            "args": [
+                "networkmonitor.py"
+            ],
+            "dependsOn":[ "Enable pipenv shell"]
+        },
+        {
+            "label": "mypy: Project",
+            "dependsOn":[
+                "Enable pipenv shell",
+                "mypy project"
+            ]
+        }
+    ]
+}

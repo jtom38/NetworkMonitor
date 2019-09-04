@@ -20,5 +20,14 @@ def test_ReportIcmpStatus():
 
     item = m.report[0]
 
-    if item.Status == "Online":
+    if item.status == "Online":
+        assert True
+
+def test_ReportIcmpMS():
+    m = Monitor(IConfig("example.yaml"))
+    m.Start()
+
+    item = m.report[0]
+
+    if item.ms == 0:
         assert True

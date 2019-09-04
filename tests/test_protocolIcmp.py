@@ -39,7 +39,7 @@ def test_ProtocolStatus():
 
     pass
 
-def test_ProtocolMS():
+def test_ProtocolMSLocalHost():
     cc = ContextConfig(IConfig("example.yaml"))
     cc.GetWorkingConfigClass(True)
     cc.ReadConfig()
@@ -52,6 +52,18 @@ def test_ProtocolMS():
         assert True
 
     pass
+
+def test_ProtocolMSGoogle():
+    cc = ContextConfig(IConfig("example.yaml"))
+    cc.GetWorkingConfigClass(True)
+    cc.ReadConfig()
+
+    cp = ContextProtocols(IProtocols("google.com", 'ICMP'))
+    cp.GetWorkingClass(True)
+    cp.Start()
+
+    if cp.MS >= 1:
+        assert True
 
 def test_PassConfigToContext():
     cc = ContextConfig(IConfig("example.yaml"))

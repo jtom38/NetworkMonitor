@@ -51,7 +51,7 @@ class Monitor():
         report = self.__configuration__.nodes
         requirement:bool = True
 
-        for node in self.__configuration__.nodes:
+        for node in report:
             if requirement == True:
                 np = node.protocol.lower()
                 if np == "icmp":

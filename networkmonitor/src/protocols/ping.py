@@ -34,7 +34,7 @@ class Ping:
         try:
             d = subprocess.run(cmd, stdout=subprocess.PIPE ,stderr=subprocess.PIPE)
             self.__ProcessReturnCode(d.returncode)
-            self.__ProcessTravelTime(d.stdout)
+            self.__ProcessTravelTime(str(d.stdout))
         except:
             pass
 
@@ -54,15 +54,15 @@ class Ping:
             param = '-c'
         pass
 
-        if self.configuration.protocols.icmp.timeout >= 0:
-            timeout = self.configuration.protocols.icmp.timeout
-            if platform.system().lower() == "windows":
-                timeoutParam = '-W'
-            else:
-                timeoutParam = '-W'
-            pass
-
-            return ['ping', param, '1', timeoutParam, str(timeout), URI]
+        #if self.configuration.protocols.icmp.timeout >= 0:
+        #    timeout = self.configuration.protocols.icmp.timeout
+        #    if platform.system().lower() == "windows":
+        #        timeoutParam = '-W'
+        #    else:
+        #        timeoutParam = '-W'
+        #    pass
+        #
+        #    return ['ping', param, '1', timeoutParam, str(timeout), URI]
 
         return ['ping', param, '1', URI]
  
@@ -80,7 +80,7 @@ class Ping:
         else:
 
             # Extract the first value
-            time = s.find('time')
+            time = s.find('time=')
             ms = s.find(' ms')
             t = s[time:ms]
             time:str = t.replace('time=', '')

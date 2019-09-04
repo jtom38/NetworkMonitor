@@ -22,7 +22,7 @@ class uiMain():
 
         # Seem to get strange results for passing the interface around.
         # Move to a common storage place or move the result into monitor?
-        self.monitor = Monitor(iconfig=self.iconfig)
+        self.monitor = Monitor(IConfig(config.argPathConfig))
         self.monitor.configuration = self.config.configuration
 
         self.columnCount = 4
