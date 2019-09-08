@@ -1,5 +1,6 @@
 
 import typing
+import datetime
 
 """
 This contains the collections that can be used within the application
@@ -10,9 +11,12 @@ class LogsCol():
     LogsCol contains the format for how log data will be stored in memory
     """
 
-    def __init__(self, level:str ='',message:str = '', name:str = '', 
-                address:str = '', protocol:str='' ):
-        import datetime
+    def __init__(self, level:str ='',
+        message:str = '', 
+        name:str = '', 
+        address:str = '', 
+        protocol:str='' ):
+
         self.level:str              = level
         self.message:str            = message
         self.name:str               = name

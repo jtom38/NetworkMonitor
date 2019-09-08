@@ -2,12 +2,11 @@
 import datetime
 import typing
 from networkmonitor import OldConfig
-from networkmonitor.src.configuration import *
-from networkmonitor.src.protocols import *
+from networkmonitor.src.configuration import IConfig, ContextConfig
+from networkmonitor.src.protocols import IProtocols, ContextProtocols
 from networkmonitor.src import Configuration
 from networkmonitor.src import Nodes
 from networkmonitor.src import InvalidProtocol, InvalidNodeConfiguration
-#from networkmonitor.src import CleanTime
 from networkmonitor.src import RefreshTimer
 
 class Monitor():

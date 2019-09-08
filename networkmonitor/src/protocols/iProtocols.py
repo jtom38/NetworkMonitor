@@ -7,7 +7,7 @@ class IProtocols:
         self.Type:str   = Type
         pass
 
-    def Start():
+    def Start(self):
         """
         This is the default method that will be used to talk to a host to get the status of the device.
         """
