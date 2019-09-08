@@ -1,4 +1,7 @@
 
+import typing
+import datetime
+
 """
 This contains the collections that can be used within the application
 """
@@ -8,17 +11,47 @@ class LogsCol():
     LogsCol contains the format for how log data will be stored in memory
     """
 
-    def __init__(self, level:str ='',message:str = '', name:str = '', 
-                address:str = '', protocol:str='' ):
-        import datetime
-        self.level      = level
-        self.message    = message
-        self.name       = name
-        self.address    = address
-        self.protocol   = protocol
-        self.time       = datetime.datetime.now()
+    def __init__(self, level:str ='',
+        message:str = '', 
+        name:str = '', 
+        address:str = '', 
+        protocol:str='' ):
+
+        self.level:str              = level
+        self.message:str            = message
+        self.name:str               = name
+        self.address:str            = address
+        self.protocol:str           = protocol
+        self.time:datetime.datetime = datetime.datetime.now()
         pass    
     pass
+
+class Configuration():
+    def __init__(self):
+        self.sleepInterval:SleepInterval    = SleepInterval()
+        self.protocols:CfgProtocols         = CfgProtocols() 
+        self.nodes                          = []
+
+        pass
+
+
+class SleepInterval():
+    r"""
+    This is used as part of Configuration to define the sleep timeout configuration
+    """
+    def __init__(self):
+        self.hours:int      = 0
+        self.minutes:int    = 0
+        self.seconds:int    = 0
+        pass
+
+class CfgProtocols():
+    def __init__(self):
+        self.icmp:CfgIcmp   = CfgIcmp()
+
+class CfgIcmp():
+    def __init__(self):
+        self.timeout:int    = 0
 
 class Nodes():
     """

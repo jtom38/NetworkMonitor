@@ -4,31 +4,38 @@ import threading
 import datetime
 import time
 import typing
-from datetime import datetime
-from networkmonitor import CursesHelper, TerminalOutput, Monitor, Helper
-from networkmonitor.src import LogsCol
+#from datetime import datetime
+
+from networkmonitor import CursesHelper, Monitor
+from networkmonitor.src import LogsCol, RefreshTimer
 from networkmonitor.tui import uiLogs, uiHelp
-#from uiLogs import uiLogs
-#from uiHelp import uiHelp
+from networkmonitor.src.configuration import *
 
 class uiMain():
-    def __init__(self, config):
+    def __init__(self, config:IConfig):
+        self.iconfig = config
         self.logs = []
-        self.monitor = Monitor(config=config)
-        self.o = TerminalOutput()
         
+        self.config = ContextConfig(config)
+        self.config.GetWorkingConfigClass(True)
+        self.config.ReadConfig()
 
-        #self.tMonitor = threading.Thread(target=self.monitor.Start, daemon=True)
+        # Seem to get strange results for passing the interface around.
+        # Move to a common storage place or move the result into monitor?
+        self.monitor = Monitor(IConfig(config.argPathConfig))
+        self.monitor.configuration = self.config.configuration
+
+        self.columnCount = 4
         pass
 
-    def Start(self) -> None:
+    def Start(self):
         ch = CursesHelper()
         ch.WindowNew()
         self.__RenderWindow(ch.stdscr)
         #curses.wrapper(self.__RenderWindow)
         pass
     
-    def __RenderWindow(self, stdscr) -> None:
+    def __RenderWindow(self, stdscr):
 
         ch = CursesHelper()
 
@@ -57,7 +64,7 @@ class uiMain():
 
         # Refresh the screen with new data every 5 seconds
         
-        dtRefresh = datetime.now()
+        #dtRefresh = datetime.now()
 
         # Checking to see if the last key that was entered was 'F12'
         while (ch.key != curses.KEY_F12):
@@ -133,8 +140,9 @@ class uiMain():
         return ch
 
     def __InsertTitle(self, stdscr):
-        h = Helper()
-        res = h.GetNextNodeRefreshTime(self.monitor.c.SleepTimer, self.monitor.LastRefresh)
+        res = self.monitor.refresh.GetNextRefresh()
+        
+        #res = CleanTime().GetNextNodeRefreshTime(self.monitor.iconfig.SleepInterval, self.monitor.LastRefresh)
         title           = f"|NetworkMonitor |Refresh@{res} | "
         stdscr.attron(curses.color_pair(3))
         stdscr.addstr(0, 0, title, curses.color_pair(1))
@@ -150,11 +158,11 @@ class uiMain():
         pass
 
     def __InsertColHeader(self, stdscr, ch:CursesHelper):
-        o = TerminalOutput()
-        hName           = o.AdjustColumn("Name", ch.width/4)
-        hStatus         = o.AdjustColumn("Status", ch.width/4)
-        hProtocol       = o.AdjustColumn("Protocol", ch.width/4)        
-        hMs             = o.AdjustColumn("MS", ch.width/4)
+        #o = TerminalOutput()
+        hName           = ch.AdjustColumn("Name", ch.width/4)
+        hStatus         = ch.AdjustColumn("Status", ch.width/4)
+        hProtocol       = ch.AdjustColumn("Protocol", ch.width/4)        
+        hMs             = ch.AdjustColumn("MS", ch.width/4)
         header          = f"{hName}{hStatus}{hProtocol}{hMs}"
         
         stdscr.attron(curses.color_pair(3))
@@ -164,13 +172,13 @@ class uiMain():
         pass
 
     def __InsertLine(self, stdscr, ch: CursesHelper ,yCord):
-        o = TerminalOutput()
+        #o = TerminalOutput()
         reports = self.monitor.report
         for i in reports:
-            lName       = o.AdjustColumn(i.name, ch.width/4)
-            lStatus     = o.AdjustColumn(i.status, ch.width/4)
-            lProtocol   = o.AdjustColumn(i.protocol.upper(), ch.width/4)
-            lMs         = o.AdjustColumn(str(i.ms), ch.width/4)
+            lName       = ch.AdjustColumn(i.name, ch.width/4)
+            lStatus     = ch.AdjustColumn(i.status, ch.width/4)
+            lProtocol   = ch.AdjustColumn(i.protocol.upper(), ch.width/4)
+            lMs         = ch.AdjustColumn(str(i.ms), ch.width/4)
             line:str    = f"{lName}{lStatus}{lProtocol}{lMs}"
             if i.status == "Offline":
                 stdscr.attron(curses.color_pair(2))
@@ -184,8 +192,3 @@ class uiMain():
                 stdscr.addstr(yCord,0, line)
             yCord = yCord+1
         pass
-
-if __name__ == "__main__":
-    main = uiMain()
-    main.Start()
-    pass

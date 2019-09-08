@@ -4,7 +4,9 @@ Todo:
     ☐ Add Documentation about the config file
   CLI:
     ☐ Add Networkmonitor as standalone exec
-    ☐ Add --config to load new files
+    ✔ Add --config to load new files @done(19-08-12 07:16)
+    ✔ Add Yaml Support @done(19-08-12 07:17)
+    ☐ 
   Categories:
     ☐ Add Categories to the nodes
     ☐ Add Command to filter though categories
@@ -28,5 +30,5 @@ Todo:
       ✔ Add POST method @done(19-07-11 17:00)
       ✔ Add 'HTTP:POST' as valid flag @done(19-07-14 15:30)
   ping.py:
-    ☐ Update Tests for the reworked ping
+    ✔ Update Tests for the reworked ping @done(19-08-12 07:16)
     ✔ Add responce time @done(19-07-14 15:30)

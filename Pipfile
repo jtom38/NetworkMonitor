@@ -5,13 +5,14 @@ verify_ssl = true
 
 [dev-packages]
 pylint = "*"
+mypy = "*"
+pytest = "*"
+pytest-cov = "*"
 
 [packages]
 requests = "*"
-pytest-cov = "*"
-pytest = "*"
 click = "*"
-colorama = "*"
+pyyaml = "*"
 
 [requires]
 python_version = "3.7"

@@ -7,6 +7,7 @@ setup(name='networkmonitor',
     author='James Tombleson',
     url='http://github.com/luther38/networkmonitor',   
     packages=[
+        'pipenv',
         'requests',
         'click'
     ],

@@ -4,34 +4,43 @@ import time
 import json
 
 from networkmonitor.src import Nodes
+from networkmonitor.src import InvalidNodeConfiguration
+#from networkmonitor.src import YamlConfig
 
-class Config:
+class OldConfig:
     """
     About:
     Config class will handle the read/write to configuration files.
+    Will load '.yaml' or '.json' types.
     """
 
-    def __init__(self, JsonConfig:str):
-        self.jsonConfig = JsonConfig
+    def __init__(self, PathConfig:str):
+        self.PathConfig = PathConfig
         self.nodes = []
+
         try:
-            with open(JsonConfig) as jsonFile:
-                res = json.load(jsonFile)
-                
-                self.SleepTimer:int = res['SleepInterval']
-                self.__ParseNodes(res)
-                #self.Nodes = res['Nodes'] 
-        except Exception:
-            print(f'Failed to load {self.jsonConfig}')
-        
+            if PathConfig.endswith('yaml'):
+                self.PathConfig = PathConfig
+                #y = YamlConfig()
+                # send to yaml processor
+
+
+            if PathConfig.endswith('json'):
+                # Send to json processor
+                self.PathConfig = PathConfig
+                self.__JsonUpdateConfig()
+
+        except InvalidNodeConfiguration:
+            print(f"Expected a configuration file type of '.yaml' or '.json'")
+
         pass
 
     def UpdateConfig(self):
         while True:
-            if os.path.exists(self.jsonConfig) == True:
+            if os.path.exists(self.PathConfig) == True:
                 # found the file
                 try:
-                    cfg = Config(self.jsonConfig)
+                    cfg = Config(self.PathConfig)
                     if cfg.nodes != "":
                         return cfg
                 except Exception:
@@ -41,7 +50,18 @@ class Config:
                 print("No config.json was found.  Exiting...")
                 exit()
 
-    def __ParseNodes(self, json:str):
+    def __JsonUpdateConfig(self):
+        try:
+            with open(self.PathConfig) as jsonFile:
+                res = json.load(jsonFile)
+                
+                self.SleepTimer:int = res['SleepInterval']
+                self.__JsonParseNodes(res)
+                #self.Nodes = res['Nodes'] 
+        except Exception:
+            print(f'Failed to load {self.PathConfig}')
+
+    def __JsonParseNodes(self, json:str):
         for d in json['Nodes']:
             try:
                 node = Nodes(d['Name'], d['Address'], d['Protocol'])
@@ -65,3 +85,4 @@ class Config:
 
             self.nodes.append(node)
         pass
+

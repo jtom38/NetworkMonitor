@@ -1,0 +1,42 @@
+{
+    "SleepInterval": {
+        "Hours" : 0,
+        "Minutes": 2,
+        "Seconds": 0
+    },
+    "Protocols":{
+        "ICMP":{
+            "Timeout": 1
+        }
+    },
+    "Nodes": [
+        {
+            "Name":     "LocalHost",
+            "Address":  "localhost",
+            "Protocol": "icmp",
+            "Required": true,
+            "Category":"Local"
+        },
+        {
+            "Name":"WAN",
+            "Address":"192.168.0.1",
+            "Protocol":"icmp",
+            "Required":true,
+            "Category": "Local"
+        },
+        {
+            "Name":"Google",
+            "Address":"google.com",
+            "Protocol":"icmp",
+            "Required":false,
+            "Category":"External"
+        },   
+        {
+            "Name":"Google",
+            "Address":"google.com",
+            "Protocol":"http:get",
+            "Required":false,
+            "Category":"External"
+        }
+    ]
+}
