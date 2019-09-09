@@ -1,5 +1,6 @@
 
 import typing
+import uuid
 import datetime
 
 """
@@ -8,7 +9,7 @@ This contains the collections that can be used within the application
 
 class LogsCol():
     """
-    LogsCol contains the format for how log data will be stored in memory
+    LogsCol contains the format for how log data will be stored in sql.
     """
 
     def __init__(self, level:str ='',
@@ -17,6 +18,7 @@ class LogsCol():
         address:str = '', 
         protocol:str='' ):
 
+        self.key:str                = str(uuid.uuid4())
         self.level:str              = level
         self.message:str            = message
         self.name:str               = name

@@ -1,4 +1,6 @@
 
 
+from .iLogs import ILogs
 from .contextLogs import ContextLogs
-from .iLog import ILog
+
+from .sqlite import SQLite

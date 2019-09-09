@@ -1,14 +1,30 @@
 
-from typing import List
-from networkmonitor.src import LogsCol
-import sqlite3
+from networkmonitor.src.exceptions import InvalidProtocol
+from networkmonitor.src.collections import LogsCol
+from networkmonitor.src.logs import ILogs, SQLite
 
 class ContextLogs:
-    def __init__(self):
-        #self.logs: List[LogsCol] = [] 
-        sqlite3.connect()
+    r"""
+    ContextLogs
+    """
+    def __init__(self, ILog: ILogs) -> None:
+        self.__ilogs__: ILogs = ILog
+
+        self.DBType = ILog.DBType
+        self.DBFile = ILog.DBFile
+
+        
         pass
-    
-    def AddLog(self, Log: LogsCol):
-        #self.logs.append(Log)
+
+    def __GetClass__(self) -> None:
+        if self.DBType.lower() == "sqlite":
+            l = SQLite(self.__ilogs__)
+        else:
+            raise InvalidProtocol(f"Requested Log type is not supported.  See Documentation for supported log types.")
+        
+        self.interface = l
+
+    def AddLog(self, Log: LogsCol) -> None:
+        self.interface.AddLog(log)
         pass
+
