@@ -81,5 +81,3 @@ class Monitor():
             #Copy our local version to the global scope
             self.LastRefresh = datetime.datetime.now()
             self.report = report
-
-

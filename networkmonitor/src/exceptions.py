@@ -10,6 +10,13 @@ class InvalidProtocol(NetworkMonitorException):
     Raised when user enters a protocol that is not supported by NetworkMonitor
     """
 
+# Log Errors
+class InvalidLogType(NetworkMonitorException):
+    """
+    Raised when the user tries to use a illegal logging type.  Currently supports sqlite.
+    """
+
+
 # Config Loader
 class InvalidNodeConfiguration(NetworkMonitorException):
     """

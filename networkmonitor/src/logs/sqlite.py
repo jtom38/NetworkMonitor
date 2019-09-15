@@ -1,28 +1,58 @@
 
+import datetime
 from networkmonitor.src.collections import LogsCol
 from networkmonitor.src.logs import ILogs
 from sqlite3 import connect, Cursor
+import sqlite3
 
 class SQLite:
     def __init__(self, ILogs:ILogs) -> None:
         self.__ilogs__:ILogs = ILogs 
 
         self.table:str  = "logs"
-        self.file:str   = "networkmonitor.sqlite"
+        self.file:str   = ILogs.DBFile
         
         self.sql:connect = connect(self.file)
         self.cursor: Cursor = self.sql.cursor()        
         self.__generatetable__()
         pass
 
-    def __generatetable__(self) -> False:
-        command:str = "Create TABLE logs (key PRIMARY KEY, level, message, name, address, protocol, time)"
+    def __generatetable__(self) -> bool:
+        command:str = f'''Create TABLE {self.table} (
+            key         TEXT PRIMARY KEY, 
+            level       TEXT, 
+            message     TEXT, 
+            name        TEXT, 
+            address     TEXT, 
+            protocol    TEXT, 
+            time        NUMERIC)'''
         try:
             self.cursor.execute(command)
+            self.sql.commit()
             return True
         except:
             return False
+
+    def __convertToSqlTime__(self, logtime:datetime.datetime) -> sqlite3.Time:
+        try:
+            t = sqlite3.Time(hour=logtime.hour, minute=logtime.minute, )
+            return t
+        except:
+            return None
+
+    def CloseConnection(self) -> None:
+        try:
+            self.cursor.close()
+        except:
+            pass
     
-    def AddLog(self, Log: LogsCol):
-        #self.logs.append(Log)
-        pass
+    def AddLog(self, Log: LogsCol) -> bool:
+        sqlTime = self.__convertToSqlTime__(Log.time)
+        
+        self.cursor.execute(f'''Insert INTO {self.table} 
+            (key, level, message, name, address, protocol, time) Values 
+            ('{Log.key}', '{Log.level}', '{Log.message}', '{Log.name}', '{Log.address}', '{Log.protocol}', '{Log.time}')''')
+
+    def GetRecordByKey(self, key:str):
+        self.cursor.execute(f"Select * from {self.table} where key = '{key}' ")
+        
