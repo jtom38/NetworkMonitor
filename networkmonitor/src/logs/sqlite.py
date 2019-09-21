@@ -40,19 +40,22 @@ class SQLite:
         except:
             return None
 
-    def CloseConnection(self) -> None:
+    def Close(self) -> None:
         try:
             self.cursor.close()
         except:
             pass
     
-    def AddLog(self, Log: LogsCol) -> bool:
+    def Add(self, Log: LogsCol) -> bool:
         sqlTime = self.__convertToSqlTime__(Log.time)
         
-        self.cursor.execute(f'''Insert INTO {self.table} 
-            (key, level, message, name, address, protocol, time) Values 
-            ('{Log.key}', '{Log.level}', '{Log.message}', '{Log.name}', '{Log.address}', '{Log.protocol}', '{Log.time}')''')
+        self.cursor.execute(f"Insert INTO {self.table} (key, level, message, name, address, protocol, time) Values ('{Log.key}', '{Log.level}', '{Log.message}', '{Log.name}', '{Log.address}', '{Log.protocol}', '{sqlTime}')")
 
-    def GetRecordByKey(self, key:str):
-        self.cursor.execute(f"Select * from {self.table} where key = '{key}' ")
+    def GetByKey(self, key:str):
+        res =  self.cursor.execute(f"Select * from {self.table} where key = '{key}' ")
+        return res
+
+    def GetTop(self,top:int):
+        res =  self.cursor.execute(f"Select * from {self.table} Top 1")
+        return res
         

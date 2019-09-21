@@ -1,7 +1,7 @@
 
 import datetime
 import typing
-from networkmonitor import OldConfig
+#from networkmonitor import OldConfig
 from networkmonitor.src.configuration import IConfig, ContextConfig
 from networkmonitor.src.protocols import IProtocols, ContextProtocols
 from networkmonitor.src import Configuration

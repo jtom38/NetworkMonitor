@@ -16,6 +16,12 @@ class InvalidLogType(NetworkMonitorException):
     Raised when the user tries to use a illegal logging type.  Currently supports sqlite.
     """
 
+class FailedToLogMessage(NetworkMonitorException):
+    """
+    Raised when the requested log does not get added to the records.
+    """
+
+###
 
 # Config Loader
 class InvalidNodeConfiguration(NetworkMonitorException):

@@ -26,7 +26,12 @@ class LogsCol():
         self.protocol:str           = protocol
         self.time:datetime.datetime = datetime.datetime.now()
         pass    
-    pass
+
+    def __str__(self) -> str:
+        """
+        Converts the message to a string based result.
+        """
+        return f"{self.time} - {self.level} - {self.protocol} - {self.message}"
 
 class Configuration():
     def __init__(self):
