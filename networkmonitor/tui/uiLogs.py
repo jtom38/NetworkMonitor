@@ -2,12 +2,26 @@
 import curses
 import typing
 from networkmonitor import CursesHelper
+from networkmonitor.src.configuration import *
+from networkmonitor.src.logs import *
 from networkmonitor.src import LogsCol
 
 class uiLogs():
-    logs = []
+    #logs = []
 
-    def __init__(self):
+    def __init__(self, iconfig:IConfig):
+        self.__iconfig__:IConfig = iconfig
+
+        self.config = ContextConfig(iconfig)
+        self.config.GetWorkingConfigClass(True)
+        self.config.ReadConfig()
+
+        self.logger = ContextLogs(ILogs(
+            self.config.configuration.logging.type, 
+            self.config.configuration.logging.filename
+            )
+        )
+
         #self.logs = []
         pass
 
@@ -69,6 +83,8 @@ class uiLogs():
         o = CursesHelper()
         x = 2        
         col = 4
+
+        #lines = self.logger.
 
         for line in self.logs:
             if x <= height:

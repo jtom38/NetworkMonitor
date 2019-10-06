@@ -26,18 +26,35 @@ def test_AddLog():
     if res == True:
         assert True       
 
+def test_BulkEntry():
+    cl = ContextLogs(ILogs('csv', 'logs.csv'))
+    l1 = LogsCol(level="debug", message="debug", name="Google01", address="google.com", protocol="icmp")
+    l2 = LogsCol(level="debug", message="debug", name="Google02", address="google.com", protocol="icmp")
+    items:List[LogsCol] = [l1, l2]
+
+    res = cl.AddMany(items)
+
+    if res is True:
+        assert True
+
 def test_GetTop1():
     cl = ContextLogs(ILogs("csv", "logs.csv"))
     #l = LogsCol(level="debug", message="debug", name="Google", address="google.com", protocol="icmp")
     res: List[LogsCol] = cl.GetTop(1)
     print(res)
-    if res['name'] is "Google":
+    if res.name == "Google":
         assert True
-    
-def test_BulkEntry():
-    cl = ContextLogs(ILogs('csv', 'logs.csv'))
-    l1 = LogsCol(level="debug", message="debug", name="Google", address="google.com", protocol="icmp")
-    l2 = LogsCol(level="debug", message="debug", name="Google", address="google.com", protocol="icmp")
-    items:List[LogsCol] = [l1, l2]
 
-    res = cl.AddMany(items)
+def test_GetTop1NameGoogle():
+    cl = ContextLogs(ILogs("csv", 'logs.csv'))
+    i = cl.GetTop(1)
+    d = cl.GetByKey(i.key)
+    if d.key == i.key:
+        assert True
+
+def test_GetAll():
+    cl = ContextLogs(ILogs('csv', 'logs.csv'))
+    i = cl.GetAll()
+
+    if i.__len__() >= 1:
+        assert True

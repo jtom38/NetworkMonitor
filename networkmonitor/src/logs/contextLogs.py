@@ -6,7 +6,7 @@ from networkmonitor.src.exceptions import InvalidLogType
 from networkmonitor.src.collections import LogsCol
 from networkmonitor.src.logs import ILogs, SQLite, CSV
 
-class ContextLogs:
+class ContextLogs():
     r"""
     ContextLogs
     """
@@ -63,10 +63,14 @@ class ContextLogs:
         return res
 
     def GetByKey(self, key:str) -> LogsCol:
-        self.__interface__.GetByKey(key)
+        res = self.__interface__.GetByKey(key)
+        return res
 
     def GetTop(self, top:int) -> List[LogsCol]:
         res = self.__interface__.GetTop(top)
         return res
 
-
+    def GetAll(self) -> List[LogsCol]:
+        res = self.__interface__.GetAll()
+        return res
+        

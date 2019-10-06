@@ -36,6 +36,7 @@ class LogsCol():
 class Configuration():
     def __init__(self):
         self.sleepInterval:SleepInterval    = SleepInterval()
+        self.logging: CfgLogging            = CfgLogging()
         self.protocols:CfgProtocols         = CfgProtocols() 
         self.nodes                          = []
 
@@ -51,6 +52,11 @@ class SleepInterval():
         self.minutes:int    = 0
         self.seconds:int    = 0
         pass
+
+class CfgLogging():
+    def __init__(self):
+        self.type:str       = ''
+        self.filename:str   = ''
 
 class CfgProtocols():
     def __init__(self):

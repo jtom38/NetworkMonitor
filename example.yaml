@@ -7,6 +7,12 @@ SleepInterval:
   Minutes: 2
   Seconds: 0
 
+# Defines how messages will be stored.
+# Example when a nodes goes offline and comes back online.
+Logging:
+  Type: csv
+  Filename: 'log.csv' 
+
 Protocols:
   ICMP:
     # This defines the max amount of time we will wait before we exit the command  

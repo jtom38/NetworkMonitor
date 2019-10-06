@@ -28,3 +28,6 @@ class ILogs():
 
     def GetTop(self, top:int) -> List[LogsCol]:
         raise NotImplementedError
+
+    def GetAll(self) ->List[LogsCol]:
+        raise NotImplementedError

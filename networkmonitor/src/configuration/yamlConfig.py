@@ -40,6 +40,7 @@ class YamlConfig(IConfig):
                     raw = yaml.safe_load(yamlFile)
 
                     self.__ParseSleepInterval(raw['SleepInterval'])
+                    self.__ParseLogging(raw['Logging'])
                     self.__ParseProtocols(raw['Protocols'])
                     self.__ParseNodes(raw)
             except FailedToLoadConfigurationFile:
@@ -57,6 +58,10 @@ class YamlConfig(IConfig):
         self.configuration.sleepInterval.hours = json['Hours']
         self.configuration.sleepInterval.minutes = json["Minutes"]
         self.configuration.sleepInterval.seconds = json["Seconds"]
+
+    def __ParseLogging(self, json:str):
+        self.configuration.logging.type = json['Type']
+        self.configuration.logging.filename = json['Filename']
 
     def __ParseProtocols(self, json:str):
         self.configuration.protocols.icmp.timeout   = json['ICMP']['Timeout']

@@ -4,6 +4,10 @@
 # Defines how long we will wait before checking nodes again
 SleepInterval: 120
 
+Logging:
+  Type: csv
+  Filename: 'log.csv' 
+
 # Checking to make sure we have a connection to the outside world
 # You will want to place the nodes in the order that you want them tested
 Nodes:

@@ -129,3 +129,52 @@ def test_ProtocolsIcmpTimeoutNewConfig():
 
     if c.configuration.protocols.icmp.timeout == 0:
         assert True
+
+def test_LoggingType():
+    c = ContextConfig(IConfig("example.json"))
+    c.GetWorkingConfigClass(True)
+    c.ReadConfig()
+
+    if c.configuration.logging.type == 'csv':
+        assert True
+
+def test_LoggingFileName():
+    c = ContextConfig(IConfig("example.json"))
+    c.GetWorkingConfigClass(True)
+    c.ReadConfig()
+
+    if c.configuration.logging.filename == 'log.csv':
+        assert True
+
+def test_LoggingTypeNewConfig():
+    f = 'delete.json'
+    try:
+        os.remove(f)
+    except:
+        pass
+
+    c = ContextConfig(IConfig(f))
+    c.GetWorkingConfigClass(True)
+    c.NewConfig()
+    c.ReadConfig()
+
+    os.remove(f)
+    if c.configuration.logging.type == "csv":
+        assert True
+
+def test_LoggingFilenameNewConfig():
+    f = 'delete.json'
+    try:
+        os.remove(f)
+    except:
+        pass
+
+    c = ContextConfig(IConfig(f))
+    c.GetWorkingConfigClass(True)
+    c.NewConfig()
+    c.ReadConfig()
+
+    os.remove(f)
+    if c.configuration.logging.filename == 'log.csv':
+        assert True
+

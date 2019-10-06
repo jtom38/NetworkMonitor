@@ -31,7 +31,8 @@ class CSV(ILogs):
         with open(self.DBFile, newline='') as csvFile:
             r = csv.DictReader(csvFile)
             for i in r:
-                records.append(i)
+                log:LogsCol =self.__ConvertDictToClass__(i)
+                records.append(log)
         return records
 
     def __AddRow__(self, Log:LogsCol) -> bool:
@@ -45,6 +46,18 @@ class CSV(ILogs):
             raise Exception(f"Failed to write the requested log message. {Log.__str__()}")
             #return False
         pass
+
+    def __ConvertDictToClass__(self, dict) -> LogsCol:
+        l = LogsCol(
+            level=      dict['level'], 
+            message=    dict['message'], 
+            name=       dict['name'], 
+            address=    dict['address'], 
+            protocol=   dict['protocol']
+        )
+        l.key = dict['key']
+        l.time = dict['time']
+        return l
 
     def Close(self) -> None:
         # Currently, I do not thing with csv files!  
@@ -62,19 +75,33 @@ class CSV(ILogs):
         for i in Logs:
             res = self.__AddRow__(i)
             if res is False:
-                raise FailedToGenerateNewFile(f"Requested Log message containing: {i.name} - {i.message}")
-
-        pass
+                raise FailedToGenerateNewFile(f"Requested Log message containing: {i.name} - {i.message}")        
+        return res
 
     def GetByKey(self, key:str) -> LogsCol:
         """
         Checks the index for the requested key.  
         Returns the record found if any.
         """
+
+        items = self.__ReadCsvFile__()
+
+        for i in items:
+            if key == i.key:
+                return i
+
+        return LogsCol()
+
         pass
 
     def GetTop(self, top:int) -> List[LogsCol]:
         records:List[LogsCol] = self.__ReadCsvFile__()
         
         return records[top-1]
+
+    def GetAll(self) -> List[LogsCol]:
+        return self.__ReadCsvFile__()
+
+    def OrderByDate(self, items: List[LogsCol]) -> List[LogsCol]:
+        
 

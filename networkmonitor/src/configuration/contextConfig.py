@@ -4,7 +4,7 @@ import os
 from networkmonitor.src.configuration import IConfig, YamlConfig, JsonConfig
 from networkmonitor.src.collections import Configuration
 
-class ContextConfig:
+class ContextConfig(IConfig):
     """
     ConfigContext is the handler for the IConfig and tells the process who needs to do what.
     
@@ -87,6 +87,10 @@ class ContextConfig:
                 "Hours": 0,
                 "Minutes": 2,
                 "Seconds": 0
+            },
+            "Logging":{
+                "Type":"csv",
+                "Filename": 'log.csv'
             },
             "Protocols":{
                 "ICMP":{

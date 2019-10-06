@@ -10,15 +10,23 @@ from networkmonitor import CursesHelper, Monitor
 from networkmonitor.src import LogsCol, RefreshTimer
 from networkmonitor.tui import uiLogs, uiHelp
 from networkmonitor.src.configuration import *
+from networkmonitor.src.logs import *
 
 class uiMain():
     def __init__(self, config:IConfig):
         self.iconfig = config
-        self.logs = []
-        
+        #self.logs = []
+
         self.config = ContextConfig(config)
         self.config.GetWorkingConfigClass(True)
         self.config.ReadConfig()
+
+        self.logger = ContextLogs(
+            ILogs(
+                self.config.configuration.logging.type, 
+                self.config.configuration.logging.filename
+            )
+        )
 
         # Seem to get strange results for passing the interface around.
         # Move to a common storage place or move the result into monitor?
@@ -107,7 +115,9 @@ class uiMain():
     def __GenLogData(self):
         i = 0
         while i < 10:
-            self.logs.insert(self.logs.__len__()+1 ,LogsCol(level='debug', message='Unable to reach service.', name='Google', address="www.google.com", protocol='ICMP') )
+            #self.logs.insert(self.logs.__len__()+1 ,LogsCol(level='debug', message='Unable to reach service.', name='Google', address="www.google.com", protocol='ICMP') )
+            self.logger.Add(LogsCol("Debug", "This is a test", "Debug", "localhost", "ICMP"))
+            
             i = i+1
 
     def __TuiHelp(self, stdscr):
@@ -125,7 +135,8 @@ class uiMain():
 
     def __TuiLogs(self, stdscr):
         l = uiLogs()
-        l.logs = self.logs
+        l.
+        #l.logs = self.logs
         l.Start()        
 
         # Once we come back here, update ch with the current stdscr

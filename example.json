@@ -4,6 +4,10 @@
         "Minutes": 2,
         "Seconds": 0
     },
+    "Logging": {
+        "Type": "csv",
+        "Filename": "log.csv"
+    },
     "Protocols":{
         "ICMP":{
             "Timeout": 1
